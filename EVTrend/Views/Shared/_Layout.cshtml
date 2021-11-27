@@ -3,26 +3,41 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EVTrend</title>
+    <title>EVTrend</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EVTrend</a>
+                <a class="navbar-brand" style="color: white;" asp-controller="Home" asp-action="Index">EVTrend</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav navbar-right">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="TotalElecCarbon" asp-action="Index">總體數據圖表</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="DetailedElecCarbon" asp-action="Index">細部數據圖表</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtCarbon" asp-action="Index">碳排量管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtElec" asp-action="Index">電動車數據管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Member" asp-controller="Member" asp-action="Index">會員中心</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login">使用者登入</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Register">註冊會員</a>
                         </li>
                     </ul>
                 </div>
@@ -37,7 +52,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - EVTrend - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - EVTrend
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
