@@ -1,6 +1,15 @@
-﻿@{
+﻿@using EVTrend.Areas.Content.Models
+@using System.Data
+@{
     ViewData["Title"] = "總體碳排量與電動車數據";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>TODO...</p>
+@foreach (var item in Model)
+{
+    <p> @item.Year </p>
+    <p> @item.Country </p>
+    <p> @item.ElecRegisterNumber </p>
+    <p> @item.TotalRegisterNumber </p>
+} 
