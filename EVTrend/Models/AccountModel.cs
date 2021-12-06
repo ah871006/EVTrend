@@ -6,8 +6,67 @@ using System.Threading.Tasks;
 
 namespace EVTrend.Models
 {
-    public class AccountModel
+    /// <summary>
+    /// 帳號MODEL
+    /// </summary>
+    public class AccountModels : SetResult
     {
+        //帳號
+        public string Account { get; set; }
 
+        //密碼
+        public string Password { get; set; }
+
+        //再次確認密碼
+        public string PasswordCheck { get; set; }
+
+        //暱稱
+        public string Username { get; set; }
+    }
+
+    /// <summary>
+    /// 會員MODEL
+    /// </summary>
+    public class Member : AccountModels
+    {
+        //性別
+        public string Gender { get; set; }
+
+        //生日
+        public DateTime? Birthday { get; set; }
+
+        //帳號建立時間
+        public DateTime CreateTime { get; set; }
+
+        //帳號修改時間
+        public DateTime ModifyTime { get; set; }
+
+        //帳號啟用時間
+        public DateTime AccountStart { get; set; }
+
+        //帳號停用時間
+        public DateTime AccountEnd { get; set; }
+
+        //身分狀態編碼
+        public string StatusNo { get; set; }
+    }
+
+    /// <summary>
+    /// 執行成功與否 檢測用Model
+    /// </summary>
+    public class SetResult
+    {
+        public SetResult()
+        {
+            //預設
+            ok = true;
+            ResultMessage = "";
+        }
+
+        //是否成功
+        public bool ok { get; set; }
+
+        //結果訊息
+        public string ResultMessage { get; set; }
     }
 }
