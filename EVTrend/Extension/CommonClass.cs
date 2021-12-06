@@ -468,7 +468,7 @@ namespace EVTrend.Extension
         public string ChangeTimeZone()
         {
             //取得本系統時區
-            return "SWITCHOFFSET(getdate(), '" + ConfigHelper.AppSettings.SystemTimeZone + "')";
+            return "NOW()";
         }
     }
 }
