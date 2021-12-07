@@ -1,6 +1,44 @@
-﻿@{
+﻿@model Member
+@{
     ViewData["Title"] = "使用者登入";
 }
-<h1>@ViewData["Title"]</h1>
-
-<p>TODO...</p>
+<html>
+<head>
+    <script src="~/js/jqAccountUnit.js"></script>
+</head>
+<body>
+    <h1>@ViewData["Title"]</h1>
+    <div class="container">
+        <div class="row">
+            <form action="/Account/Register" method="POST" name="signupform" id="signupform">
+                <br>
+                <div class="col-12 form-inline">
+                    <label>帳號：</label>
+                    <input type="text" class="form-control required" id="Account" name="Account" onblur="CheckDuplicateAccount();">
+                </div>
+                <br>
+                <div class="col-12 form-inline">
+                    <label>密碼：</label>
+                    <input type="password" class="form-control required" id="Password" name="Password">
+                </div>
+                <br>
+               
+                <div class="col-12 form-inline">
+                    <button type="submit" class="btn btn-primary" id="login" onclick="return false">登入</button>
+                    <a id="forget-password" href="" onclick="return false">忘記密碼</a>
+                </div>
+                
+            </form>
+            @* 回應訊息 *@
+            @if (Model != null)
+            {
+                <script type="text/javascript">
+                    var resultMessage = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.ResultMessage) as String);
+                    alert(resultMessage);
+                    document.location.href = "/Member/Member/";
+                </script>
+            }
+        </div>
+    </div>
+</body>
+</html>
