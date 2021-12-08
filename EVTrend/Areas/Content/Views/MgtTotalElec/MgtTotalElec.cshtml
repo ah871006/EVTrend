@@ -1,7 +1,7 @@
 ﻿@using EVTrend.Areas.Content.Models
 @using System.Data
 @{
-    ViewData["Title"] = "電動車數據管理";
+    ViewData["Title"] = "總體電動車數據管理";
 }
 @{
 
@@ -83,7 +83,7 @@
 
         $.ajax({
             type: "POST",
-            url: "MgtElec/InsertTotalElec",
+            url: "MgtTotalElec/InsertTotalElec",
             data: {
                 "YearNo": YearNo,
                 "CountryNo": CountryNo,

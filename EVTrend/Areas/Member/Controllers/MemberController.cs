@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EVTrend.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace EVTrend.Areas.Member.Controllers
 {
     [Area(areaName: "Member")]
 
-    public class MemberController : Controller
+    public class MemberController : _BaseController
     {
         /// <summary>
         /// 會員中心View

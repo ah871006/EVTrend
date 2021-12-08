@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EVTrend.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +9,16 @@ namespace EVTrend.Areas.Content.Controllers
 {
     [Area(areaName: "Content")]
 
-    public class MgtCarbonController : Controller
+    public class MgtTotalCarbonController : _BaseController
     {
         /// <summary>
-        /// 碳排量管理View
+        /// 總體碳排量管理View
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public ActionResult Index()
         {
-            return View("MgtCarbon");
+            return View("MgtTotalCarbon");
         }
     }
 }

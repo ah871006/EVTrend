@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EVTrend.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace EVTrend.Areas.News.Controllers
 {
     [Area(areaName: "News")]
 
-    public class NewsController : Controller
+    public class NewsController : _BaseController
     {
         /// <summary>
         /// 最新消息View
