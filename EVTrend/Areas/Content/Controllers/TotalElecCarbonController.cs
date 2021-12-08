@@ -62,10 +62,16 @@ namespace EVTrend.Areas.Content.Controllers
             foreach (DataRow row in data.Rows)
             {
                 TotalElecModel model = new TotalElecModel();
+
                 model.Year = row.ItemArray.GetValue(0).ToString();
                 model.Country = row.ItemArray.GetValue(1).ToString();
                 model.ElecRegisterNumber = (float)row.ItemArray.GetValue(2);
                 model.TotalRegisterNumber = (float)row.ItemArray.GetValue(3);
+
+                //計算電動車數量/總車種數量 => 得到百分比
+                var CarPercentage = (float)row.ItemArray.GetValue(2) / (float)row.ItemArray.GetValue(3);
+                model.Percentage = (float)Math.Round((Decimal)CarPercentage, 7);
+
                 list.Add(model);
             }
             return list;
@@ -82,6 +88,11 @@ namespace EVTrend.Areas.Content.Controllers
                 model.Country = row.ItemArray.GetValue(1).ToString();
                 model.T_CarbonNumber = (float)row.ItemArray.GetValue(2);
                 model.TotalCarbonNumber = (float)row.ItemArray.GetValue(3);
+
+                //計算運輸業碳排數量/總碳排數量 => 得到百分比
+                var CarbonPercentage = (float)row.ItemArray.GetValue(2) / (float)row.ItemArray.GetValue(3);
+                model.Percentage = (float)Math.Round((Decimal)CarbonPercentage, 7);
+
                 list.Add(model);
             }
             return list;

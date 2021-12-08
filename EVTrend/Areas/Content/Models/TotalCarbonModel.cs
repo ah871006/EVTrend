@@ -12,6 +12,7 @@ namespace EVTrend.Areas.Content.Models
         public string Country { get; set; }
         public float T_CarbonNumber { get; set; }
         public float TotalCarbonNumber { get; set; }
+        public float Percentage { get; set; }
 
     }
 }
