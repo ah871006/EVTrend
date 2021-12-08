@@ -11,10 +11,10 @@ namespace EVTrend.Areas.Content.Controllers
 {
     [Area(areaName: "Content")]
 
-    public class MgtElecController : _BaseController
+    public class MgtTotalElecController : _BaseController
     {
         /// <summary>
-        /// 電動車數據管理View
+        /// 總體電動車數據管理View
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -24,7 +24,7 @@ namespace EVTrend.Areas.Content.Controllers
             ViewData["GetYear"] = GetYear();
             ViewData["GetCountry"] = GetCountry();
             //ViewData["GetCountry"] = GetCountry();
-            return View("MgtElec");
+            return View("MgtTotalElec");
         }
 
 

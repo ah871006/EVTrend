@@ -23,16 +23,22 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav navbar-right">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Content" asp-controller="TotalElecCarbon" asp-action="Index">總體數據圖表</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="TotalElecCarbon" asp-action="Index" id="TotalElecCarbon">總體數據圖表</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="Content" asp-controller="DetailedElecCarbon" asp-action="Index" id="DetailedElecCarbon" style="display: none;">細部數據圖表</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtCarbon" asp-action="Index" id="MgtCarbon" style="display: none;">碳排量管理</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtTotalCarbon" asp-action="Index" id="MgtTotalCarbon" style="display: none;">總體碳排量管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtElec" asp-action="Index" id="MgtElec" style="display: none;">電動車數據管理</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtTotalElec" asp-action="Index" id="MgtTotalElec" style="display: none;">總體電動車數據管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedCarbon" asp-action="Index" id="MgtDetailedCarbon" style="display: none;">細部碳排量管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedElec" asp-action="Index" id="MgtDetailedElec" style="display: none;">細部電動車數據管理</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index" id="MgtNews" style="display: none;">最新消息管理</a>
@@ -97,14 +103,22 @@
 
                 if (response == "0") { //管理員
                     //抓Object
-                    var MgtCarbon = document.getElementById("MgtCarbon");
-                    var MgtElec = document.getElementById("MgtElec");
-                    var MgtElec = document.getElementById("MgtElec");
+                    var TotalElecCarbon = document.getElementById("TotalElecCarbon");
+                    var MgtTotalCarbon = document.getElementById("MgtTotalCarbon");
+                    var MgtTotalElec = document.getElementById("MgtTotalElec");
+                    var MgtDetailedCarbon = document.getElementById("MgtDetailedCarbon");
+                    var MgtDetailedElec = document.getElementById("MgtDetailedElec");
                     var MgtNews = document.getElementById("MgtNews");
 
+                    //管理員隱藏數據圖表的功能
+                    TotalElecCarbon.style.display = "none";
+                    DetailedElecCarbon.style.display = "none";
+
                     //管理員才可以管理資料
-                    MgtCarbon.style.display = "block";
-                    MgtElec.style.display = "block";
+                    MgtTotalCarbon.style.display = "block";
+                    MgtTotalElec.style.display = "block";
+                    MgtDetailedCarbon.style.display = "block";
+                    MgtDetailedElec.style.display = "block";
                     MgtNews.style.display = "block";
 
                     //超連結變更為使用者管理
