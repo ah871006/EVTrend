@@ -67,7 +67,7 @@ namespace EVTrend.Controllers
         public ActionResult Register(Member Model)
         {
             Model.ok = true;
-            Model.StatusNo = "0";
+            Model.StatusNo = "1";
 
             //SQL Insert Member
             var sqlStr = string.Format(
@@ -186,15 +186,16 @@ namespace EVTrend.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public bool CheckLoginStatus()
+        public string CheckLoginStatus()
         {
-            if (string.IsNullOrEmpty(getUserStatusNo()))
+            var loginStatus = getUserStatusNo();
+            if (string.IsNullOrEmpty(loginStatus))
             {
-                return false;
+                return null;
             }
             else 
             {
-                return true;
+                return loginStatus;
             }
         }
 
