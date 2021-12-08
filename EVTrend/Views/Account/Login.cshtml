@@ -14,7 +14,15 @@
                 <br>
                 <div class="col-12 form-inline">
                     <label>帳號：</label>
-                    <input type="text" class="form-control required" id="Account" name="Account">
+                    @if (Model != null)
+                    {
+                        <!--自動帶入帳號-->
+                        <input type="text" class="form-control required" id="Account" name="Account" value="@Model.Account">
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control required" id="Account" name="Account">
+                    }
                 </div>
                 <br>
                 <div class="col-12 form-inline">
