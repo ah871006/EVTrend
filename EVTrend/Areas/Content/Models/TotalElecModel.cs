@@ -26,12 +26,14 @@ namespace EVTrend.Areas.Content.Models
 
     }
 
+    //用在年份清單
     public class TimeModel
     {
         public int YearNo { get; set; }
         public string YearName { get; set; }
     }
 
+    //用在國家清單
     public class CountryModel
     {
         public int CountryNo { get; set; }
