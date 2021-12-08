@@ -15,4 +15,14 @@ namespace EVTrend.Areas.Content.Models
         public float Percentage { get; set; }
 
     }
+    public class MgtTotalCarbonModel : TotalCarbonModel
+    {
+        public int TotalCarbonNo { get; set; }
+        public int YearNo { get; set; }
+        public int CountryNo { get; set; }
+        public string CreateTime { get; set; }
+        public string ModifyTime { get; set; }
+
+    }
+    
 }

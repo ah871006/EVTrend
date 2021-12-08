@@ -20,6 +20,11 @@ namespace EVTrend.Areas.Content.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            // admin check
+            if (getUserStatusNo() != "0")
+            {
+                return Redirect("~/Home/Error");
+            }
             ViewData["GetTotalElec"] = GetTotalElec();
             ViewData["GetYear"] = GetYear();
             ViewData["GetCountry"] = GetCountry();
@@ -35,7 +40,7 @@ namespace EVTrend.Areas.Content.Controllers
         [HttpGet]
         public List<TimeModel> GetYear()
         {
-            
+
             var sqlStr = string.Format(
                 "SELECT YearNo, YearName FROM evtrend.`years`");
             var data = _DB_GetData(sqlStr);
@@ -75,73 +80,31 @@ namespace EVTrend.Areas.Content.Controllers
         }
 
 
-        /// <summary>
-        /// 取得總體電動車數據
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public List<MgtTotalElecModel> GetTotalElec()
-        {
-
-            var sqlStr = string.Format(
-                "SELECT TotalRegisterNo, TotalRegisterYear, YearName, TotalRegisterCountryNo, countryName,T_RegisterNumber,TotalRegisterNumber,TotalRegisterCreateTime,TotalRegisterModifyTime FROM evtrend.`total_ registercar` as a " +
-                "inner join evtrend.`countries` as b " +
-                "on a.TotalRegisterCountryNo = b.CountryNo " +
-                "inner join evtrend.`years` as c " +
-                "on a.TotalRegisterYear = c.YearNo " +
-                "ORDER BY CountryName,YearName ASC");
-            var data = _DB_GetData(sqlStr);
-            List<MgtTotalElecModel> list = new List<MgtTotalElecModel>();
-            foreach (DataRow row in data.Rows)
-            {
-                MgtTotalElecModel model = new MgtTotalElecModel();
-                model.TotalRegisterNo = (int)row.ItemArray.GetValue(0);
-                model.YearNo = (int)row.ItemArray.GetValue(1);
-                model.Year = row.ItemArray.GetValue(2).ToString();
-                model.CountryNo = (int)row.ItemArray.GetValue(3);
-                model.Country = row.ItemArray.GetValue(4).ToString();
-                model.ElecRegisterNumber = (float)row.ItemArray.GetValue(5);
-                model.TotalRegisterNumber = (float)row.ItemArray.GetValue(6);
-                model.CreateTime = row.ItemArray.GetValue(7).ToString();
-                if (row.ItemArray.GetValue(8).ToString() == "")
-                {
-                    model.ModifyTime = "NULL";
-                }
-                else
-                {
-                    model.ModifyTime = row.ItemArray.GetValue(8).ToString();
-                }
-                list.Add(model);
-            }
-            return list;
-
-        }
-
-
 
         /// <summary>
-        /// 更新總體電動車數據
+        /// 新增總體電動車數據
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         public bool InsertTotalElec(MgtTotalElecModel Model)
         {
+            //admin check
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
             // 檢查是否重複新增
             var sqlSelect = string.Format("SELECT 1 from evtrend.`total_ registercar` " +
-                "WHERE TotalRegisterCountryNo={0} and TotalRegisterYear={1}", SqlVal2(Model.YearNo), SqlVal2(Model.CountryNo));
+                "WHERE TotalRegisterCountryNo={0} and TotalRegisterYear={1}", SqlVal2(Model.CountryNo), SqlVal2(Model.YearNo));
 
             var dataSelect = _DB_GetData(sqlSelect);
             if (dataSelect.Rows.Count > 0)
             {
                 return false;
             }
-            
-            //驗證是否輸入不為負的數字
-            if(Model.ElecRegisterNumber<0 || Model.TotalRegisterNumber < 0)
-            {
-                return false;
-            }
-            
+
+
             //SQL Insert TotalElec
             var sqlStr = string.Format(
                 @"INSERT INTO evtrend.`total_ registercar` (" +
@@ -175,6 +138,76 @@ namespace EVTrend.Areas.Content.Controllers
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 修改總體電動車數據
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public bool UpdateTotalElec(MgtTotalElecModel Model)
+        {
+            // admin check
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
+            //SQL Insert TotalElec
+            var sqlStr = string.Format("UPDATE evtrend.`total_ registercar` " +
+                "SET T_RegisterNumber = {0} " +
+                ",TotalRegisterNumber  = {1} " +
+                ",TotalRegisterModifyTime = {2} " +
+                "WHERE " +
+                "TotalRegisterNo={3}",
+                SqlVal2(Model.ElecRegisterNumber),
+                SqlVal2(Model.TotalRegisterNumber),
+                DBC.ChangeTimeZone(),
+                SqlVal2(Model.TotalRegisterNo));
+
+            var check = _DB_Execute(sqlStr);
+
+            //是否成功
+            if (check == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 刪除總體電動車數據
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public bool DeleteTotalElec(MgtTotalElecModel Model)
+        {
+
+            // admin check
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
+            var sqlStr = string.Format("DELETE FROM evtrend.`total_ registercar`" +
+                "WHERE TotalRegisterNo={0} ",
+                SqlVal2(Model.TotalRegisterNo));
+
+            var check = _DB_Execute(sqlStr);
+
+            //是否成功
+            if (check == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

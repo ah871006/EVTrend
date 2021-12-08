@@ -1,7 +1,7 @@
 ﻿@using EVTrend.Areas.Content.Models
 @using System.Data
 @{
-    ViewData["Title"] = "總體電動車數據管理";
+    ViewData["Title"] = "電動車數據管理";
 }
 @{
 
@@ -31,6 +31,8 @@
             <td>@item.TotalRegisterNumber</td>
             <td>@item.CreateTime</td>
             <td>@item.ModifyTime</td>
+            <td><button onclick="showEdit()">修改</button></td>
+            <td><button onclick="deleteSubmit(@item.TotalRegisterNo)">刪除</button></td>
         </tr>
     }
 </table>
@@ -59,26 +61,24 @@
     </form>
 </div>
 <script>
+    //新增功能
     function insertSubmit() {
         var YearNo = $("#Year").val();
         var CountryNo = $("#Country").val();
         var ElecRegisterNumber = $("#ElecNumber").val();
         var TotalRegisterNumber = $("#TotalNumber").val();
 
-
+        //數字限制條件 驗證非負浮點數（正浮點數   0）
+        var NumberReg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
 
         //輸入檢查
         if (YearNo == "" || CountryNo == "") {
-            alert("請選擇確切的年份和國家");
+            alert("請選擇確切的年份和國家！");
             return
-        } else if (ElecRegisterNumber == "") {
-            alert("請輸入電動車領牌數量");
-            return
-        } else if (TotalRegisterNumber == "") {
-            alert("請輸入全部車種領牌數量");
+        } else if (!NumberReg.test(ElecRegisterNumber) || !NumberReg.test(TotalRegisterNumber) || ElecRegisterNumber == "" || TotalRegisterNumber == "") {
+            alert("請輸入正確車子領牌數量！ (非負數字)");
             return
         }
-
 
 
         $.ajax({
@@ -99,9 +99,11 @@
                 if (result == true) {
                     //searchSubmit();
                     alert("新增成功")
+                    location.reload();
                     //$("#msg").text("新增成功");
                 } else {
-                    alert("新增失敗!! 可能失敗原因：輸入錯誤(須為整數且不為負)、資料已存在、權限不足")
+                    alert("新增失敗!! 可能失敗原因：資料已存在、權限不足")
+                    location.reload();
                     //$("#msg").text("新增失敗!! 可能失敗原因：輸入錯誤(須為整數且不為負)、資料已存在、權限不足");
                 }
 
@@ -112,5 +114,45 @@
             }
         });
 
+    }
+
+    //修改功能
+    function showEdit() {
+
+    }
+
+    //刪除功能
+    function deleteSubmit(id) {
+        //視窗提示
+        if (window.confirm("是否確定要刪除?")) {
+            $.ajax({
+                type: "POST",
+                url: "MgtTotalElec/DeleteTotalElec",
+                data: {
+                    "TotalRegisterNo": id,
+                },
+                async: true,
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    //console.log(data);
+                    if (result == true) {
+                        alert("刪除成功");
+                        location.reload();
+                        //$("#msg").text("新增成功");
+                    } else {
+                        alert("刪除失敗!! 可能失敗原因：權限不足");
+                        location.reload();
+                        //$("#msg").text("新增失敗!! 可能失敗原因：輸入錯誤(須為整數且不為負)、資料已存在、權限不足");
+                    }
+
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
     }
 </script>
