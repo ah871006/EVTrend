@@ -38,10 +38,10 @@
                             <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index">最新消息</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Member" asp-controller="Member" asp-action="Index">會員中心</a>
+                            <a class="nav-link text-light" asp-area="Member" asp-controller="Member" asp-action="Index" id="MemberCenter">會員中心</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login">使用者登入</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login" id="Log">使用者登入</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Register">註冊會員</a>
@@ -65,3 +65,31 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+@* 最後才跑JS *@
+<script defer="defer">
+    //Ajax 需同步化 取得登入狀態
+    $.ajax({
+        url: '/Account/CheckLoginStatus',
+        async: false,
+        success: function (response) {
+            //是會員的話
+            if (response) {
+                //抓Object
+                var Log = document.getElementById("Log");
+
+                //抓Object
+                var MemberCenter = document.getElementById("MemberCenter");
+
+                //修改路徑
+                Log.href = '/Account/LogOff';
+
+                //超連結變更為使用者登出
+                Log.innerText = "使用者登出";
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log("Failed");
+        }
+    });
+</script>

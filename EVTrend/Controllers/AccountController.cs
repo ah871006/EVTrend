@@ -12,21 +12,21 @@ namespace EVTrend.Controllers
     public class AccountController : _BaseController
     {
         /// <summary>
-        /// 使用者登入View
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        /// <summary>
         /// 註冊會員View
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public ActionResult Register()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 使用者登入View
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Login()
         {
             return View();
         }
@@ -114,6 +114,102 @@ namespace EVTrend.Controllers
             }
 
             return View(Model);
+        }
+
+        /// <summary>
+        /// 登入驗證
+        /// 可以在這邊驗證完如果判斷是admin，則把ViewData["admin"] = visible;
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Login(AccountModels Model)
+        {
+            //SQL Select Member
+            var sqlStr = string.Format("SELECT Account, Password, Username, StatusNo FROM member WHERE Account = {0}", SqlVal2(Model.Account));
+
+            //SQL Check
+            var data = _DB_GetData(sqlStr);
+
+            //資料庫內是否有此帳號
+            if (data.Rows.Count > 0)
+            {
+                //帳號與密碼是否相符
+                if (Model.Account == data.Rows[0].ItemArray.GetValue(0).ToString() && SHA256_Compare(data.Rows[0].ItemArray.GetValue(1).ToString(), Model.Password))
+                {
+                    if (data.Rows[0].ItemArray.GetValue(3).ToString() == "2")
+                    {
+                        //登入成功，但遭到停權
+                        Model.ok = false;
+                        Model.ResultMessage = "登入失敗，您的帳號已遭到『停權』。";
+                        return View(Model);
+                    }
+                    else
+                    {
+                        // 加入cookie，預設使用者關閉瀏覽器時清除
+                        Response.Cookies.Append("userName", data.Rows[0].ItemArray.GetValue(2).ToString());
+                        Response.Cookies.Append("account", data.Rows[0].ItemArray.GetValue(0).ToString());
+
+                        //登入成功後返回首頁
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    //登入失敗 帳號或密碼錯誤
+                    Model.ok = false;
+                    Model.ResultMessage = "登入失敗，帳號或密碼錯誤";
+                    return View(Model);
+                }
+            }
+            else
+            {
+                //登入失敗 找不到此帳號
+                Model.ok = false;
+                Model.ResultMessage = "登入失敗，找不到此帳號";
+                return View(Model);
+            }
+        }
+
+        /// <summary>
+        /// 忘記密碼 GET
+        /// </summary>
+        /// <param name="Account"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult ForgetPassword(string Account)
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 確認登入狀態
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public bool CheckLoginStatus()
+        {
+            if (string.IsNullOrEmpty(getUserStatusNo()))
+            {
+                return false;
+            }
+            else 
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult LogOff()
+        {
+            // 刪除cookie，預設使用者關閉瀏覽器時清除
+            Response.Cookies.Delete("userName");
+            Response.Cookies.Delete("account");
+
+            //登出後返回首頁
+            return RedirectToAction("Index", "Home");
         }
     }
 }

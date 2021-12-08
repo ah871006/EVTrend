@@ -10,7 +10,7 @@
     <h1>@ViewData["Title"]</h1>
     <div class="container">
         <div class="row">
-            <form action="/Account/Register" method="POST" name="signupform" id="signupform">
+            <form action="/Account/Register" method="POST" id="signupform" name="signupform">
                 <br>
                 <div class="col-12 form-inline">
                     <label>帳號：</label>
@@ -57,7 +57,7 @@
                 <script type="text/javascript">
                     var resultMessage = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.ResultMessage) as String);
                     alert(resultMessage);
-                    document.location.href = "/Member/Member/";
+                    document.location.href = "/Account/Login/";
                 </script>
             }
         </div>
