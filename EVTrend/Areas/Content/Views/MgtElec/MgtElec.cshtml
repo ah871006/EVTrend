@@ -1,6 +1,116 @@
-﻿@{
+﻿@using EVTrend.Areas.Content.Models
+@using System.Data
+@{
     ViewData["Title"] = "電動車數據管理";
+}
+@{
+
+    IEnumerable<MgtTotalElecModel> TotalElecs = ViewData["GetTotalElec"] as IEnumerable<MgtTotalElecModel>;
+    IEnumerable<TimeModel> TotalYears = ViewData["GetYear"] as IEnumerable<TimeModel>;
+    IEnumerable<CountryModel> TotalCountry = ViewData["GetCountry"] as IEnumerable<CountryModel>;
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>TODO...</p>
+<table>
+    <tr>
+        <th>編號</th>
+        <th>國家</th>
+        <th>年分</th>
+        <th>電動車領牌數</th>
+        <th>全部車種領牌數</th>
+        <th>創建時間</th>
+        <th>修改時間</th>
+    </tr>
+    @foreach (MgtTotalElecModel item in TotalElecs)
+    {
+        <tr>
+            <td>@item.TotalRegisterNo</td>
+            <td>@item.Year</td>
+            <td>@item.Country</td>
+            <td>@item.ElecRegisterNumber</td>
+            <td>@item.TotalRegisterNumber</td>
+            <td>@item.CreateTime</td>
+            <td>@item.ModifyTime</td>
+        </tr>
+    }
+</table>
+<div>
+    <form>
+        <label class="ye">年份</label>
+        <select id="Year">
+            @foreach (var item in TotalYears)
+            {
+                <option value="@item.YearNo">@item.YearName</option>
+            }
+        </select>
+        <label class="ye">國家</label>
+        <select id="Country">
+            @foreach (var item in TotalCountry)
+            {
+                <option value="@item.CountryNo">@item.CountryName</option>
+            }
+        </select>
+        <label class="ye">電動車領牌數</label>
+        <input id="ElecNumber" />
+        <label class="ye">全部車種領牌數</label>
+        <input id="TotalNumber" />
+        <button type="button" onclick="insertSubmit()">新增</button>
+
+    </form>
+</div>
+<script>
+    function insertSubmit() {
+        var YearNo = $("#Year").val();
+        var CountryNo = $("#Country").val();
+        var ElecRegisterNumber = $("#ElecNumber").val();
+        var TotalRegisterNumber = $("#TotalNumber").val();
+
+
+
+        //輸入檢查
+        if (YearNo == "" || CountryNo == "") {
+            alert("請選擇確切的年份和國家");
+            return
+        } else if (ElecRegisterNumber == "") {
+            alert("請輸入電動車領牌數量");
+            return
+        } else if (TotalRegisterNumber == "") {
+            alert("請輸入全部車種領牌數量");
+            return
+        }
+
+
+
+        $.ajax({
+            type: "POST",
+            url: "MgtElec/InsertTotalElec",
+            data: {
+                "YearNo": YearNo,
+                "CountryNo": CountryNo,
+                "ElecRegisterNumber": ElecRegisterNumber,
+                "TotalRegisterNumber": TotalRegisterNumber
+            },
+            async: true,
+            beforeSend: function () {
+
+            },
+            success: function (result) {
+                //console.log(data);
+                if (result == true) {
+                    //searchSubmit();
+                    alert("新增成功")
+                    //$("#msg").text("新增成功");
+                } else {
+                    alert("新增失敗!! 可能失敗原因：輸入錯誤(須為整數且不為負)、資料已存在、權限不足")
+                    //$("#msg").text("新增失敗!! 可能失敗原因：輸入錯誤(須為整數且不為負)、資料已存在、權限不足");
+                }
+
+
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+
+    }
+</script>

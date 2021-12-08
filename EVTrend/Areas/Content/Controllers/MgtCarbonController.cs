@@ -8,16 +8,16 @@ namespace EVTrend.Areas.Content.Controllers
 {
     [Area(areaName: "Content")]
 
-    public class DetailedElecCarbon : Controller
+    public class MgtCarbonController : Controller
     {
         /// <summary>
-        /// 細部碳排量與電動車數據View
+        /// 碳排量管理View
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public ActionResult Index()
         {
-            return View("DetailedElecCarbon");
+            return View("MgtCarbon");
         }
     }
 }
