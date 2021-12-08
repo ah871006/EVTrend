@@ -9,10 +9,10 @@ namespace EVTrend.Areas.Member.Controllers
 {
     [Area(areaName: "Member")]
 
-    public class MemberController : _BaseController
+    public class MgtMemberController : _BaseController
     {
         /// <summary>
-        /// 會員中心View
+        /// 使用者管理View
         /// </summary>
         /// <returns></returns>
 
@@ -21,7 +21,7 @@ namespace EVTrend.Areas.Member.Controllers
             string account;
             Request.Cookies.TryGetValue("account", out account);
             ViewData["Member"] = GetMemberModel(account);
-            return View("ShowMember");
+            return View("MgtMember");
         }
 
         private DataTable GetMember(string account)
