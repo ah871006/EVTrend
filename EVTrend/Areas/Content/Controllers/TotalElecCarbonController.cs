@@ -31,7 +31,7 @@ namespace EVTrend.Areas.Content.Controllers
         private DataTable GetTotalElec()
         {
             var sqlStr = string.Format(
-                "SELECT YearName, countryName,T_RegisterNumber,TotalRegisterNumber FROM evtrend.`total_ registercar` as a " +
+                "SELECT YearName, countryName,T_RegisterNumber,TotalRegisterNumber FROM evtrend.`total_registercar` as a " +
                 "inner join evtrend.`countries` as b " +
                 "on a.TotalRegisterCountryNo = b.CountryNo " +
                 "inner join evtrend.`years` as c " +
