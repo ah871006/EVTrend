@@ -1,9 +1,8 @@
 ﻿//Ready 一開始載入
 $(document).ready(function () {
-    //登入按鈕 事件
+    //登入
     $("#loginbtn").click(function () {
-        //帳號與密碼檢測
-        if (PasswordCheck()) {
+        if (AccountCheck() & PasswordCheck()) {
             //送出表單 登入
             document.loginform.submit();
         } else {
