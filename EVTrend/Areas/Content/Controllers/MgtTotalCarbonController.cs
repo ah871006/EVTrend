@@ -81,7 +81,7 @@ namespace EVTrend.Areas.Content.Controllers
 
 
         /// <summary>
-        /// 取得總體電動車數據
+        /// 取得總體碳排量數據
         /// </summary>
         /// <returns></returns>
         [HttpGet]
