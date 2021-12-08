@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace EVTrend.Areas.Member.Models
 {
-    public class MemberModel
-    {
-
-    }
+    public class MemberModels : EVTrend.Models.Member { }
 }

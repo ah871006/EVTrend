@@ -1,0 +1,33 @@
+﻿@using EVTrend.Areas.Member.Models
+
+@{
+    ViewData["Title"] = "使用者管理";
+}
+@{
+    MemberModels member = ViewData["Member"] as MemberModels;
+}
+
+<html>
+<head>
+    <script src="~/js/jqAccountUnit.js"></script>
+</head>
+<body>
+    <h1>@ViewData["Title"]</h1>
+    <div class="container">
+        <div class="row">
+            <div class="mt-3 col-12 form-inline">
+                <span>帳號：</span> <span>@member.Account</span>
+            </div>
+            <div class="mt-2 col-12 form-inline">
+                <span>暱稱：</span> <span>@member.Username</span>
+            </div>
+            <div class="mt-2 col-12 form-inline">
+                <span>性別：</span> <span>@member.Gender</span>
+            </div>
+            <div class="mt-2 col-12 form-inline">
+                <span>生日：</span> <span>@member.Birthday.Value.ToString("D", new System.Globalization.CultureInfo("zh-TW"))</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

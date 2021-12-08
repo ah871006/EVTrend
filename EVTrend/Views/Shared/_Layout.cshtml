@@ -44,7 +44,10 @@
                             <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index" id="MgtNews" style="display: none;">最新消息管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Member" asp-controller="Member" asp-action="Index" id="MemberCenter" style="display: none;">會員中心</a>
+                            <a class="nav-link text-light" asp-area="Member" asp-controller="Member" asp-action="Index" id="ShowMember" style="display: none;">會員中心</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Member" asp-controller="MgtMember" asp-action="Index" id="MgtMember" style="display: none;">使用者管理</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login" id="Log">使用者登入</a>
@@ -82,7 +85,7 @@
             if (response != null) {
                 //抓Object
                 var DetailedElecCarbon = document.getElementById("DetailedElecCarbon");
-                var MemberCenter = document.getElementById("MemberCenter");
+                var ShowMember = document.getElementById("ShowMember");
                 var Log = document.getElementById("Log");
                 var Register = document.getElementById("Register");
 
@@ -90,7 +93,7 @@
                 DetailedElecCarbon.style.display = "block";
 
                 //使用者登入才可以瀏覽會員中心
-                MemberCenter.style.display = "block";
+                ShowMember.style.display = "block";
 
                 //修改路徑
                 Log.href = '/Account/LogOff';
@@ -109,10 +112,12 @@
                     var MgtDetailedCarbon = document.getElementById("MgtDetailedCarbon");
                     var MgtDetailedElec = document.getElementById("MgtDetailedElec");
                     var MgtNews = document.getElementById("MgtNews");
+                    var MgtMember = document.getElementById("MgtMember");
 
-                    //管理員隱藏數據圖表的功能
+                    //管理員隱藏數據圖表、會員中心的功能
                     TotalElecCarbon.style.display = "none";
                     DetailedElecCarbon.style.display = "none";
+                    ShowMember.style.display = "none";
 
                     //管理員才可以管理資料
                     MgtTotalCarbon.style.display = "block";
@@ -120,9 +125,7 @@
                     MgtDetailedCarbon.style.display = "block";
                     MgtDetailedElec.style.display = "block";
                     MgtNews.style.display = "block";
-
-                    //超連結變更為使用者管理
-                    MemberCenter.innerText = "使用者管理";
+                    MgtMember.style.display = "block";
                 }
             }
         },
