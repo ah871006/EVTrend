@@ -11,12 +11,9 @@ namespace EVTrend.Areas.Content.Models
     {
         public string Year { get; set; }
         public string Country { get; set; }
-
-        [Range(0, int.MaxValue, ErrorMessage = "必須為非負數字")]
         public float ElecRegisterNumber { get; set; }
-
-        [Range(0, int.MaxValue, ErrorMessage = "必須為非負數字")]
         public float TotalRegisterNumber { get; set; }
+        public float Percentage { get; set; }
 
     }
     public class MgtTotalElecModel:TotalElecModel

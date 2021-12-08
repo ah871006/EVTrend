@@ -12,10 +12,11 @@
 <h1>@ViewData["Title"]</h1>
 <table>
     <tr>
-        <th>Year</th>
-        <th>Country</th>
-        <th>ElecRegisterNumber</th>
-        <th>TotalRegisterNumber</th>
+        <th>年分</th>
+        <th>國家</th>
+        <th>電動車領牌數</th>
+        <th>全部車種領牌數</th>
+        <th>比例</th>
     </tr>
     @foreach (TotalElecModel TotalElec in TotalElecs)
     {
@@ -24,16 +25,18 @@
             <td>@TotalElec.Country</td>
             <td>@TotalElec.ElecRegisterNumber</td>
             <td>@TotalElec.TotalRegisterNumber</td>
+            <td>@TotalElec.Percentage</td>
         </tr>
     }
 </table>
 <p>TotalCarbon_Table</p>
 <table>
     <tr>
-        <th>Year</th>
-        <th>Country</th>
-        <th>T_CarbonNumber</th>
-        <th>TotalCarbonNumber</th>
+        <th>年分</th>
+        <th>國家</th>
+        <th>運輸業碳排量(單位：千公噸)</th>
+        <th>總體碳排量(單位：千公噸)</th>
+        <th>比例</th>
     </tr>
     @foreach (TotalCarbonModel TotalCarbon in TotalCarbons)
     {
@@ -42,6 +45,7 @@
             <td>@TotalCarbon.Country</td>
             <td>@TotalCarbon.T_CarbonNumber</td>
             <td>@TotalCarbon.TotalCarbonNumber</td>
+            <td>@TotalCarbon.Percentage</td>
         </tr>
     }
 </table>
