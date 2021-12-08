@@ -20,15 +20,6 @@ namespace EVTrend.Controllers
 
         public IActionResult Index()
         {
-            // 測試是否成功撈到資料
-            var sqlStr = string.Format("Select account from member");
-            var data = _DB_GetData(sqlStr);
-
-            if (data.Rows.Count > 0)
-            {
-                ViewData["Account"] = data.Rows[0].ItemArray.GetValue(0).ToString();
-            }
-
             return View();
         }
 
