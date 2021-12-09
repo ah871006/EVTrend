@@ -7,10 +7,25 @@ using System.Threading.Tasks;
 namespace EVTrend.Models
 {
     /// <summary>
+    /// 身分類型MODEL
+    /// </summary>
+    public class StatusModels : SetResult
+    {
+        //身分類型編號
+        public string StatusNo { get; set; }
+
+        //身分類型描述
+        public string StatusName { get; set; }
+    }
+
+    /// <summary>
     /// 帳號MODEL
     /// </summary>
-    public class AccountModels : SetResult
+    public class AccountModels : StatusModels
     {
+        //使用者編號
+        public string MemberNo { get; set; }
+
         //帳號
         public string Account { get; set; }
 
@@ -46,9 +61,6 @@ namespace EVTrend.Models
 
         //帳號停用時間
         public DateTime AccountEnd { get; set; }
-
-        //身分狀態編碼
-        public string StatusNo { get; set; }
     }
 
     /// <summary>
