@@ -173,7 +173,7 @@ function UsernameCheck() {
     //條件檢查
     if (Username.val() == "" || Username.val().length > 20 || Username.val() == $("#Account").val()) {
         //錯誤訊息
-        var errMsg = "<span class='usernameTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*必須填寫且不可與帳號相同</font></span>";
+        var errMsg = "<span class='usernameTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*必須填寫且不可與帳號相同且要在20字內</font></span>";
 
         //訊息顯示
         Username.parent().append(errMsg);
