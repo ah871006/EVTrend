@@ -10,16 +10,16 @@ namespace EVTrend.Areas.News.Controllers
 {
     [Area(areaName: "News")]
 
-    public class NewsController : _BaseController
+    public class MgtNewsController : _BaseController
     {
         /// <summary>
-        /// 最新消息View
+        /// 最新消息管理View
         /// </summary>
         /// <returns></returns>
 
         public IActionResult Index()
         {
-            return View("ShowNews");
+            return View("MgtNews");
         }
     }
 }

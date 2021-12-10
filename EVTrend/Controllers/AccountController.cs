@@ -66,38 +66,78 @@ namespace EVTrend.Controllers
         [HttpPost]
         public ActionResult Register(Member Model)
         {
+            var loginStatus = getUserStatusNo();
+            var sqlStr = "";
             Model.ok = true;
-            Model.StatusNo = "1";
 
-            //SQL Insert Member
-            var sqlStr = string.Format(
-                @"INSERT INTO member (" +
-                    "Account," +
-                    "Password," +
-                    "Username," +
-                    "Gender," +
-                    "Birthday," +
-                    "CreateTime," +
-                    "AccountStart," +
-                    "StatusNo" +
-                ")VALUES(" +
-                    "{0}," +
-                    "{1}," +
-                    "{2}," +
-                    "{3}," +
-                    "{4}," +
-                    "{5}," +
-                    "{6}," +
-                    "{7}",
-                    SqlVal2(Model.Account),
-                    SqlVal2(SHA256_Encryption(Model.Password)),
-                    SqlVal2(Model.Username),
-                    SqlVal2(Model.Gender),
-                    SqlVal2(Model.Birthday),
-                    DBC.ChangeTimeZone(),
-                    DBC.ChangeTimeZone(),
-                    SqlVal2(Model.StatusNo) + ")"
-                );
+            if (loginStatus == "0") //由管理員新增的使用者
+            {
+                Model.Password = "Admin@123"; //由管理員新增的使用者之密碼都是'Admin@123'
+
+                //SQL Insert Member
+                sqlStr = string.Format(
+                    @"INSERT INTO member (" +
+                        "Account," +
+                        "Password," +
+                        "Username," +
+                        "Gender," +
+                        "Birthday," +
+                        "CreateTime," +
+                        "AccountStart," +
+                        "StatusNo" +
+                    ")VALUES(" +
+                        "{0}," +
+                        "{1}," +
+                        "{2}," +
+                        "{3}," +
+                        "{4}," +
+                        "{5}," +
+                        "{6}," +
+                        "{7}",
+                        SqlVal2(Model.Account),
+                        SqlVal2(SHA256_Encryption(Model.Password)),
+                        SqlVal2(Model.Username),
+                        SqlVal2(Model.Gender),
+                        SqlVal2(Model.Birthday),
+                        DBC.ChangeTimeZone(),
+                        DBC.ChangeTimeZone(),
+                        SqlVal2(Model.StatusNo) + ")"
+                    );
+            }
+            else
+            {
+                Model.StatusNo = "1";
+
+                //SQL Insert Member
+                sqlStr = string.Format(
+                    @"INSERT INTO member (" +
+                        "Account," +
+                        "Password," +
+                        "Username," +
+                        "Gender," +
+                        "Birthday," +
+                        "CreateTime," +
+                        "AccountStart," +
+                        "StatusNo" +
+                    ")VALUES(" +
+                        "{0}," +
+                        "{1}," +
+                        "{2}," +
+                        "{3}," +
+                        "{4}," +
+                        "{5}," +
+                        "{6}," +
+                        "{7}",
+                        SqlVal2(Model.Account),
+                        SqlVal2(SHA256_Encryption(Model.Password)),
+                        SqlVal2(Model.Username),
+                        SqlVal2(Model.Gender),
+                        SqlVal2(Model.Birthday),
+                        DBC.ChangeTimeZone(),
+                        DBC.ChangeTimeZone(),
+                        SqlVal2(Model.StatusNo) + ")"
+                    );
+            }
 
             //SQL Check
             var check = _DB_Execute(sqlStr);
@@ -112,7 +152,7 @@ namespace EVTrend.Controllers
                 Model.ok = false;
                 Model.ResultMessage = "註冊失敗";
             }
-
+            
             return View(Model);
         }
 
@@ -140,7 +180,7 @@ namespace EVTrend.Controllers
                     {
                         //登入成功，但遭到停權
                         Model.ok = false;
-                        Model.ResultMessage = "登入失敗，您的帳號已遭到『停權』。";
+                        Model.ResultMessage = "登入失敗，您的帳號已遭到『停權』";
                         return View(Model);
                     }
                     else

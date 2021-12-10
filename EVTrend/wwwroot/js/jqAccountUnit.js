@@ -7,7 +7,7 @@ $(document).ready(function () {
             document.loginform.submit();
         } else {
             //錯誤訊息
-            alert("帳號或密碼不符合規定。");
+            alert("帳號或密碼不符合規定");
         }
     })
 
@@ -36,7 +36,7 @@ $(document).ready(function () {
                         Account.parent().append(errMsg);
 
                         //跳出錯誤訊息
-                        alert("註冊資料不符合規定。");
+                        alert("註冊資料不符合規定");
                     } else {
                         //送出表單 註冊
                         document.signupform.submit();
@@ -45,20 +45,7 @@ $(document).ready(function () {
             });
         } else {
             //錯誤訊息
-            alert("註冊資料不符合規定。");
-        }
-    })
-
-    //修改密碼 事件
-    $("#ResetPwd").click(function () {
-        //註冊條件檢查 & BirthdayCheck()
-        if (PasswordCheck() &
-            RepeatPwdCheck()) {
-            //送出表單 修改密碼
-            document.ResetForm.submit();
-        } else {
-            //錯誤訊息
-            alert("新密碼不符合規定。");
+            alert("註冊資料不符合規定");
         }
     })
 
@@ -84,9 +71,6 @@ $(document).ready(function () {
             GenderCheck();
         }
     })
-
-    //日期Format
-    DateFormat();
 })
 
 //帳號檢測
@@ -218,10 +202,10 @@ function BirthdayCheck() {
     var Birthday = $("#Birthday");
 
     //今日 物件
-    var Today = new Date().Format("yyyy-MM-dd");
+    var today = new Date().toISOString().substring(0, 10);
 
     //條件限制 檢查生日是否小於1970或大於今日
-    if (Birthday.val() != "" && (Birthday.val() < "1970-01-01" || Birthday.val() > Today)) {
+    if (Birthday.val() != "" && (Birthday.val() < "1970-01-01" || Birthday.val() > today)) {
         //錯誤訊息
         var errMsg = "<span class='birthdayTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*生日不得小於1970或大於今日</font></span>";
 
@@ -272,29 +256,5 @@ function CheckDuplicateAccount() {
                 } 
             }
         });
-    }
-}
-
-//日期Format
-function DateFormat() {
-    Date.prototype.Format = function (fmt) {
-        var o = {
-            "M+": this.getMonth() + 1, //月份 
-            "d+": this.getDate(), //日 
-            "H+": this.getHours(), //小時 
-            "m+": this.getMinutes(), //分 
-            "s+": this.getSeconds(), //秒 
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-            "S": this.getMilliseconds() //毫秒 
-        };
-        if (/(y+)/.test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        }
-        for (var k in o) {
-            if (new RegExp("(" + k + ")").test(fmt)) {
-                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            }
-        }
-        return fmt;
     }
 }
