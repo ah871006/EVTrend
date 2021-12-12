@@ -230,8 +230,12 @@ namespace EVTrend.Areas.Content.Controllers
         public bool DeleteTotalCarbon(MgtTotalCarbonModel Model)
         {
 
-            // admin check
-            
+            // admin check (plus)
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
 
             var sqlStr = string.Format("DELETE FROM evtrend.`total_carbon`" +
                 "WHERE TotalCarbonNo={0} ",
