@@ -1,6 +1,46 @@
-﻿@{
-    ViewData["Title"] = "細部碳排量與電動車數據";
+﻿@using EVTrend.Areas.Content.Models
+@using System.Data
+
+@{
+    ViewData["Title"] = "總體碳排量與電動車數據";
+}
+@{
+
+    IEnumerable<DetailedCarbonModel> DCs = ViewData["DetailedCarbon"] as IEnumerable<DetailedCarbonModel>;
+    IEnumerable<DetailedElecModel> DEs = ViewData["DetailedElec"] as IEnumerable<DetailedElecModel>;
 }
 <h1>@ViewData["Title"]</h1>
+<table>
+    <tr>
+        <th>年分</th>
+        <th>車種</th>
+        <th>碳排數量</th>
+    </tr>
+    @foreach (DetailedCarbonModel DetailedCarbon in DCs)
+    {
+        <tr>
+            <td>@DetailedCarbon.YearName</td>
+            <td>@DetailedCarbon.CarsTypeName</td>
+            <td>@DetailedCarbon.CarbonNumber</td>
+        </tr>
+    }
+</table>
+<p>電動車數據</p>
+<table>
+    <tr>
+        <th>年分</th>
+        <th>車種</th>
+        <th>該車種電動車領排數</th>
+        <th>該車種總領排數</th>
+    </tr>
+    @foreach (DetailedElecModel DetailedElec in DEs)
+    {
+        <tr>
+            <td>@DetailedElec.YearName</td>
+            <td>@DetailedElec.CarsTypeName</td>
+            <td>@DetailedElec.ElecNumber</td>
+            <td>@DetailedElec.TotalNumber</td>
+        </tr>
+    }
+</table>
 
-<p>TODO...</p>
