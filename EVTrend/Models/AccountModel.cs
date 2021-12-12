@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +28,7 @@ namespace EVTrend.Models
         //使用者編號
         public string MemberNo { get; set; }
 
-        //帳號
+        [Display(Name = "帳號")]
         public string Account { get; set; }
 
         //密碼
@@ -35,7 +37,7 @@ namespace EVTrend.Models
         //再次確認密碼
         public string PasswordCheck { get; set; }
 
-        //暱稱
+        [Display(Name = "暱稱")]
         public string Username { get; set; }
     }
 
@@ -44,10 +46,10 @@ namespace EVTrend.Models
     /// </summary>
     public class Member : AccountModels
     {
-        //性別
+        [Display(Name = "性別")]
         public string Gender { get; set; }
 
-        //生日
+        [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
 
         //帳號建立時間
@@ -61,6 +63,13 @@ namespace EVTrend.Models
 
         //帳號停用時間
         public DateTime AccountEnd { get; set; }
+
+        public List<SelectListItem> Genders { get; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "男", Text = "男" },
+            new SelectListItem { Value = "女", Text = "女"  },
+            new SelectListItem { Value = "不願透漏", Text = "不願透漏"  },
+        };
     }
 
     /// <summary>
