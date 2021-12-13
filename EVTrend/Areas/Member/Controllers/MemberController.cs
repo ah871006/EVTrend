@@ -59,7 +59,7 @@ namespace EVTrend.Areas.Member.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(EVTrend.Models.Member member)
+        public IActionResult Update(MemberModels member)
         {
             var Gender = member.Gender;
             if (Gender == "男")
