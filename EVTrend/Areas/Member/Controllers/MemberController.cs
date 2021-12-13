@@ -2,7 +2,6 @@
 using EVTrend.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace EVTrend.Areas.Member.Controllers
@@ -11,17 +10,11 @@ namespace EVTrend.Areas.Member.Controllers
 
     public class MemberController : _BaseController
     {
-        /// <summary>
-        /// 會員中心View
-        /// </summary>
-        /// <returns></returns>
-
         public IActionResult Index()
         {
             string account;
             Request.Cookies.TryGetValue("account", out account);
-            ViewData["Member"] = GetMemberModel(account);
-            return View("ShowMember");
+            return View("ShowMember", GetMemberModel(account));
         }
 
         private DataTable GetMember(string account)
@@ -32,10 +25,10 @@ namespace EVTrend.Areas.Member.Controllers
             return data;
         }
 
-        private MemberModels GetMemberModel(string account)
+        private EVTrend.Models.Member GetMemberModel(string account)
         {
             var data = GetMember(account);
-            MemberModels member = new MemberModels();
+            EVTrend.Models.Member member = new MemberModels();
             DataRow row = data.Rows[0];
 
             member.Account = row.ItemArray.GetValue(0).ToString();
@@ -58,6 +51,48 @@ namespace EVTrend.Areas.Member.Controllers
             member.Birthday = DateTime.Parse(row.ItemArray.GetValue(3).ToString());
 
             return member;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(EVTrend.Models.Member member)
+        {
+            var Gender = member.Gender;
+            if (Gender == "男")
+            {
+                member.Gender = "1";
+            }
+            else if (Gender == "女")
+            {
+                member.Gender = "2";
+            }
+            else
+            {
+                member.Gender = "3";
+            }
+
+            var sqlStr = string.Format("UPDATE member " +
+                "SET Username = {0}, " +
+                "Gender  = {1}," +
+                "Birthday = {2}, " +
+                "ModifyTime = {3} " +
+                "WHERE Account = {4}",
+                SqlVal2(member.Username),
+                SqlVal2(member.Gender),
+                SqlVal2(member.Birthday),
+                DBC.ChangeTimeZone(),
+                SqlVal2(member.Account));
+
+            var check = _DB_Execute(sqlStr);
+
+            if (check == 1)
+            {
+                return View("Index", member);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }
