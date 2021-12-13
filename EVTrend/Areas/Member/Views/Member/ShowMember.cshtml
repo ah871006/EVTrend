@@ -13,19 +13,19 @@
             <div class="row">
                 <form asp-controller="Member" asp-action="Update" method="post">
                     <div class="mt-2 col-12 form-inline">
-                        <label asp-for="Account"></label>
+                        <label asp-for="Account"></label>：
                         <input type="text" class="form-control" readonly asp-for="Account">
                     </div>
                     <div class="mt-2 col-12 form-inline">
-                        <label asp-for="Username"></label>
+                        <label asp-for="Username"></label>：
                         <input type="text" asp-for="Username" class="form-control required">
                     </div>
                     <div class="mt-2 col-12 form-inline">
-                        <label asp-for="Gender"></label>
+                        <label asp-for="Gender"></label>：
                         <select class="form-control required" asp-for="Gender" asp-items="Model.Genders"> </select>
                     </div>
                     <div class="mt-2 col-12 form-inline">
-                        <label asp-for="Birthday"></label>
+                        <label asp-for="Birthday"></label>：
                         <input type="date" asp-for="Birthday" class="form-control required" onchange="BirthdayCheck()">
                     </div>
                     <div class="mt-2 col-12 form-inline">

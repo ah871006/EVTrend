@@ -10,6 +10,10 @@ namespace EVTrend.Areas.Member.Controllers
 
     public class MemberController : _BaseController
     {
+        /// <summary>
+        /// 會員中心View
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             string account;
@@ -25,10 +29,10 @@ namespace EVTrend.Areas.Member.Controllers
             return data;
         }
 
-        private EVTrend.Models.Member GetMemberModel(string account)
+        private MemberModels GetMemberModel(string account)
         {
             var data = GetMember(account);
-            EVTrend.Models.Member member = new MemberModels();
+            MemberModels member = new MemberModels();
             DataRow row = data.Rows[0];
 
             member.Account = row.ItemArray.GetValue(0).ToString();
@@ -87,7 +91,7 @@ namespace EVTrend.Areas.Member.Controllers
 
             if (check == 1)
             {
-                return View("Index", member);
+                return View("ShowMember", member);
             }
             else
             {
