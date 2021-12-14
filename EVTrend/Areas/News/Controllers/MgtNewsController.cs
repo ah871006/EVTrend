@@ -3,6 +3,8 @@ using EVTrend.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,14 +14,140 @@ namespace EVTrend.Areas.News.Controllers
 
     public class MgtNewsController : _BaseController
     {
-        /// <summary>
-        /// 最新消息管理View
-        /// </summary>
-        /// <returns></returns>
-
         public IActionResult Index()
         {
-            return View("MgtNews");
+            if (getUserStatusNo() == "0")
+            {
+                return View("MgtNews", GetNewsPageModel());
+            }
+            else
+            {
+                return Redirect("~/Home/Error");
+            }
+        }
+
+        private DataTable GetAllNews()
+        {
+            var sqlStr = string.Format("SELECT NewsNo, NewsTypeNo, NewsTitle, NewsContent, NewsHits, CreateTime, ModifyTime, NewsEnd, NewsCreateUser, NewsModifyUser from evtrend.`news`");
+            var data = _DB_GetData(sqlStr);
+            return data;
+        }
+
+        private NewsModel ConvertRowToNewsModel(DataRow row)
+        {
+            var news = new NewsModel();
+
+            news.NewsNo = (int)row.ItemArray.GetValue(0);
+            news.NewsTypeNo = (int)row.ItemArray.GetValue(1);
+            news.NewsTitle = row.ItemArray.GetValue(2).ToString();
+            news.NewsContent = row.ItemArray.GetValue(3).ToString();
+            news.NewsHits = (int)row.ItemArray.GetValue(4);
+            news.CreateTime = DateTime.Parse(row.ItemArray.GetValue(5).ToString());
+            if (row.ItemArray.GetValue(6).ToString() != "")
+            {
+                news.ModifyTime = DateTime.ParseExact(row.ItemArray.GetValue(6).ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+            }
+            // news.NewsEnd = DateTime.Parse(row.ItemArray.GetValue(7).ToString());
+            news.NewsCreateUser = row.ItemArray.GetValue(8).ToString();
+            // news.NewsModifyUser = row.ItemArray.GetValue(9).ToString();
+
+            return news;
+        }
+
+        private NewsPageModel GetNewsPageModel()
+        {
+            var newsPageModel = new NewsPageModel();
+
+            var news = GetAllNews();
+            foreach (DataRow row in news.Rows)
+            {
+                newsPageModel.News.Add(ConvertRowToNewsModel(row));
+            }
+
+            return newsPageModel;
+        }
+
+        public bool UpdateNews(NewsModel Model)
+        {
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
+            var sqlStr = string.Format("UPDATE news " +
+                "SET NewsTitle = {0}, " +
+                "NewsContent  = {1}," +
+                "ModifyTime = {2} " +
+                "WHERE NewsNo = {3}",
+                SqlVal2(Model.NewsTitle),
+                SqlVal2(Model.NewsContent),
+                DBC.ChangeTimeZone(),
+                SqlVal2(Model.NewsNo));
+
+            var check = _DB_Execute(sqlStr);
+
+            if (check == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteNews(NewsModel Model)
+        {
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
+            var sqlStr = string.Format("DELETE FROM news WHERE NewsNo = {0}", SqlVal2(Model.NewsNo));
+
+            var check = _DB_Execute(sqlStr);
+
+            if (check == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        [HttpPost]
+        public bool AddNews(NewsModel Model)
+        {
+            var sqlStr = string.Format(
+                    @"INSERT INTO news (" +
+                        "NewsContent," +
+                        "NewsTitle," +
+                        "NewsTypeNo," +
+                        "NewsCreateUser," +
+                        "CreateTime" +
+                    ")VALUES(" +
+                        "{0}," +
+                        "{1}," +
+                        "3," +
+                        "2," +
+                        "{2}",
+                        SqlVal2(Model.NewsContent),
+                        SqlVal2(Model.NewsTitle),
+                        DBC.ChangeTimeZone() + ")"
+                    );
+
+            var check = _DB_Execute(sqlStr);
+
+            if (check == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
