@@ -1,46 +1,157 @@
-﻿@using EVTrend.Areas.Content.Models
-@using System.Data
-
-@{
-    ViewData["Title"] = "總體碳排量與電動車數據";
-}
-@{
-
-    IEnumerable<DetailedCarbonModel> DCs = ViewData["DetailedCarbon"] as IEnumerable<DetailedCarbonModel>;
-    IEnumerable<DetailedElecModel> DEs = ViewData["DetailedElec"] as IEnumerable<DetailedElecModel>;
+﻿@{
+    ViewData["Title"] = "細部碳排量與電動車數據";
 }
 <h1>@ViewData["Title"]</h1>
-<table>
-    <tr>
-        <th>年分</th>
-        <th>車種</th>
-        <th>碳排數量</th>
-    </tr>
-    @foreach (DetailedCarbonModel DetailedCarbon in DCs)
-    {
-        <tr>
-            <td>@DetailedCarbon.YearName</td>
-            <td>@DetailedCarbon.CarsTypeName</td>
-            <td>@DetailedCarbon.CarbonNumber</td>
-        </tr>
-    }
-</table>
-<p>電動車數據</p>
-<table>
-    <tr>
-        <th>年分</th>
-        <th>車種</th>
-        <th>該車種電動車領排數</th>
-        <th>該車種總領排數</th>
-    </tr>
-    @foreach (DetailedElecModel DetailedElec in DEs)
-    {
-        <tr>
-            <td>@DetailedElec.YearName</td>
-            <td>@DetailedElec.CarsTypeName</td>
-            <td>@DetailedElec.ElecNumber</td>
-            <td>@DetailedElec.TotalNumber</td>
-        </tr>
-    }
-</table>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<select id="car_type" onchange="load_data(this)">
+    <option>請選擇...</option>
+    <option value="大客車">大客車</option>
+    <option value="大貨車">大貨車</option>
+    <option value="小客車">小客車</option>
+    <option value="小貨車">小貨車</option>
+    <option value="機車">機車</option>
+</select>
+<div id="chart"></div>
 
+<script>
+    var is_frist = true
+    function load_data(sel) {
+        // get html element
+        var car_type = document.getElementById("car_type");
+        var chart = document.getElementById("chart");
+        // refresh chart
+        chart.innerHTML = "<p></p>"
+        // at frist time, remove useless option
+        if (is_frist == true) {
+            car_type.remove(0);
+            is_frist = false;
+        }
+        var title_name = sel.options[sel.selectedIndex].text + "年度統計";
+        // call backend get data here
+        $.ajax({
+            url: "@Url.Action("test", "DetailedElecCarbon")",
+            method: "get",
+            contentType: 'application/json',
+            data: { "car_type_id": car_type.value},
+            success: function (mydata) {
+                var options = {
+                    series: [{
+                        name: '總領牌數',
+                        type: 'column',
+                        data: mydata.total_car
+                    }, {
+                        name: '電動領牌數',
+                        type: 'column',
+                        data: mydata.elec_car
+                    }, {
+                        name: '碳排量(千公噸)',
+                        type: 'line',
+                        data: mydata.carbon
+                    }],
+                    chart: {
+                        height: 350,
+                        type: 'line',
+                        stacked: false
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        width: [1, 1, 4]
+                    },
+                    title: {
+                        text: title_name,
+                        align: 'left',
+                        offsetX: 200
+                    },
+                    xaxis: {
+                        categories: [2015, 2016, 2017, 2018],
+                    },
+                    yaxis: [
+                        {
+                            axisTicks: {
+                                show: true,
+                            },
+                            axisBorder: {
+                                show: true,
+                                color: '#008FFB'
+                            },
+                            labels: {
+                                style: {
+                                    colors: '#008FFB',
+                                }
+                            },
+                            title: {
+                                text: "總領牌數",
+                                style: {
+                                    color: '#008FFB',
+                                }
+                            },
+                            tooltip: {
+                                enabled: true
+                            }
+                        },
+                        {
+                            seriesName: '總領牌數',
+                            opposite: true,
+                            axisTicks: {
+                                show: true,
+                            },
+                            axisBorder: {
+                                show: true,
+                                color: '#00E396'
+                            },
+                            labels: {
+                                style: {
+                                    colors: '#00E396',
+                                }
+                            },
+                            title: {
+                                text: "電動領牌數",
+                                style: {
+                                    color: '#00E396',
+                                }
+                            },
+                        },
+                        {
+                            seriesName: '碳排量(千公噸)',
+                            opposite: true,
+                            axisTicks: {
+                                show: true,
+                            },
+                            axisBorder: {
+                                show: true,
+                                color: '#FEB019'
+                            },
+                            labels: {
+                                style: {
+                                    colors: '#FEB019',
+                                },
+                            },
+                            title: {
+                                text: "碳排量(千公噸)",
+                                style: {
+                                    color: '#FEB019',
+                                }
+                            }
+                        },
+                    ],
+                    tooltip: {
+                        fixed: {
+                            enabled: true,
+                            position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+                            offsetY: 30,
+                            offsetX: 60
+                        },
+                    },
+                    legend: {
+                        horizontalAlign: 'left',
+                        offsetX: 40
+                    }
+                };
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            }
+        });
+    }
+</script>

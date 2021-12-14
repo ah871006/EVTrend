@@ -31,7 +31,7 @@ namespace EVTrend.Areas.Content.Controllers
         private List<MgtDetailedCarbonModel> GetMgtDetailedCarbon()
         {
             var sqlStr = string.Format(
-                "SELECT CarbonNo, CarbonCountryCarsTypeNo,CarbonYear,CarbonNumber,CarbonCreateUser,CarbonCreateTime,CarbonModifyTime FROM evtrend.`carbon` as a " +
+                "SELECT CarbonNo, CarbonCountryCarsTypeNo,CarbonYear,YearName,CarbonNumber,CarbonCreateUser,CarbonCreateTime,CarbonModifyTime FROM evtrend.`carbon` as a " +
                 "inner join evtrend.`years` as b " +
                 "on a.CarbonYear = b.YearNo " +
                 "inner join evtrend.`country_carstype` as c " +
@@ -46,16 +46,17 @@ namespace EVTrend.Areas.Content.Controllers
                 model.CarbonNo = (int)row.ItemArray.GetValue(0);
                 model.CarbonCountryCarsTypeNo = (int)row.ItemArray.GetValue(1);
                 model.CarbonYear = (int)row.ItemArray.GetValue(2);
-                model.CarbonNumber = (float)row.ItemArray.GetValue(3);
-                model.CarbonCreateUser = (int)row.ItemArray.GetValue(4);
-                model.CarbonCreateTime = row.ItemArray.GetValue(5).ToString();
-                if (row.ItemArray.GetValue(6).ToString() == "")
+                model.YearName = row.ItemArray.GetValue(3).ToString();
+                model.CarbonNumber = (float)row.ItemArray.GetValue(4);
+                model.CarbonCreateUser = (int)row.ItemArray.GetValue(5);
+                model.CarbonCreateTime = row.ItemArray.GetValue(6).ToString();
+                if (row.ItemArray.GetValue(7).ToString() == "")
                 {
                     model.CarbonModifyTime = "NULL";
                 }
                 else
                 {
-                    model.CarbonModifyTime = row.ItemArray.GetValue(6).ToString();
+                    model.CarbonModifyTime = row.ItemArray.GetValue(7).ToString();
                 }
                 list.Add(model);
             }

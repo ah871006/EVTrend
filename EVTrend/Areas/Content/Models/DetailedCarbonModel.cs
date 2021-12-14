@@ -14,6 +14,7 @@ namespace EVTrend.Areas.Content.Models
         public float CarbonNumber { get; set; }
 
 
+
     }
     public class MgtDetailedCarbonModel : DetailedCarbonModel
     {
