@@ -1,5 +1,4 @@
-﻿@using EVTrend.Areas.Member.Models
-@model EVTrend.Areas.News.Models.NewsPageModel;
+﻿@model EVTrend.Areas.News.Models.NewsPageModel;
 @{
     ViewData["MgtTitle"] = "最新消息管理";
     ViewData["AddTitle"] = "新增消息";
@@ -25,15 +24,23 @@
             <div class="col-12" id="add" name="add" style="display: none;">
                 <form method="POST" id="addNewsForm" name="addNewsForm">
                     <div class="col-12 form-inline">
+                        <label>消息類型：</label>
+                        <select class="form-control required" id="addNewsTypeNo" name="addNewsTypeNo">
+                        </select>
+                    </div>
+                    <br>
+                    <div class="col-12 form-inline">
                         <label>標題：</label>
                         <input type="text" class="form-control required" id="addNewsTitle" name="addNewsTitle">
                     </div>
+                    <br>
                     <div class="col-12 form-inline">
                         <label>消息內容：</label>
                         <input type="text" class="form-control required" id="addNewsContent" name="addNewsContent">
                     </div>
+                    <br>
                     <div class="col-12 form-inline">
-                        <button type="submit" class="btn btn-success" onclick="addNews('addNewsTitle', 'addNewsContent'); return false;">確認</button>
+                        <button type="submit" class="btn btn-success" onclick="addNews('addNewsTypeNo', 'addNewsTitle', 'addNewsContent'); return false;">確認</button>
                         <span>&nbsp;&nbsp;</span>
                         <button type="button" class="btn btn-secondary" onclick="cancelAdd()">取消</button>
                     </div>
@@ -50,6 +57,7 @@
                             <th scope="col">觸及次數</th>
                             <th scope="col">創立時間</th>
                             <th scope="col">修改時間</th>
+                            <th scope="col">執行動作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,13 +65,12 @@
                         {
                             <tr>
                                 <!-- ko ifnot: IsEdit() && Item() == @news.NewsNo -->
-                            <td class="align-middle">@news.NewsNo</td>
+                                <td class="align-middle">@news.NewsNo</td>
                                 <td class="align-middle">@news.NewsTypeNo</td>
                                 <td class="align-middle">@news.NewsTitle</td>
                                 <td class="align-middle">@news.NewsContent</td>
                                 <td class="align-middle">@news.NewsHits</td>
                                 <td class="align-middle">@news.CreateTime.ToString("D", new System.Globalization.CultureInfo("zh-TW"))</td>
-
                                 @if (news.ModifyTime.Year == 1)
                                 {
                                     <td class="align-middle">N/A</td>
@@ -72,37 +79,47 @@
                                 {
                                     <td class="align-middle">@news.ModifyTime.ToString("D", new System.Globalization.CultureInfo("zh-TW"))</td>
                                 }
-
                                 <td class="align-middle">
                                     <!-- ko if: IsClickEdit() && Item() != @news.NewsNo -->
-                                <button type="button" class="btn btn-primary" disabled="disabled">修改</button>
+                                    <button type="button" class="btn btn-primary" disabled="disabled">修改</button>
                                     <span>&nbsp;&nbsp;</span>
                                     <button type="button" class="btn btn-danger" disabled="disabled">刪除</button>
                                     <!-- /ko -->
                                     <!-- ko ifnot: IsClickEdit() -->
-                                <button type="button" class="btn btn-primary" id="Edit" onclick="editNews('@news.NewsNo')">修改</button>
+                                    <button type="button" class="btn btn-primary" id="Edit" onclick="editNews('@news.NewsNo')">修改</button>
                                     <span>&nbsp;&nbsp;</span>
                                     <button type="button" class="btn btn-danger" onclick="deleteNews('@news.NewsNo')">刪除</button>
                                     <!-- /ko -->
-                            </td>
+                                </td>
                                 <!-- /ko -->
-                        </tr>
+                            </tr>
                             <tr>
                                 <!-- ko if: IsEdit() && Item() == @news.NewsNo -->
-                            <td class="align-middle" id="newsNo">@news.NewsNo</td>
+                                <td class="align-middle" id="newsNo">@news.NewsNo</td>
+                                <td class="align-middle" id="newsNo">@news.NewsTypeNo</td>
                                 <td class="align-middle">
-                                    <input type="text" class="form-control" id="editNewsTitle" name="editNewsTitle" value="@news.NewsTitle">
+                                    <input type="text" class="form-control" id="editNewsTitle" name="editNewsTitle" value="@news.NewsTitle" style="width: 160px;">
                                 </td>
                                 <td class="align-middle">
-                                    <input type="text" class="form-control" id="editNewsContent" name="editNewsContent" value="@news.NewsContent">
+                                    <input type="text" class="form-control" id="editNewsContent" name="editNewsContent" value="@news.NewsContent" style="width: 160px;">
                                 </td>
+                                <td class="align-middle" id="NewsHits">@news.NewsHits</td>
+                                <td class="align-middle">@news.CreateTime.ToString("D", new System.Globalization.CultureInfo("zh-TW"))</td>
+                                @if (news.ModifyTime.Year == 1)
+                                {
+                                    <td class="align-middle">N/A</td>
+                                }
+                                else
+                                {
+                                    <td class="align-middle">@news.ModifyTime.ToString("D", new System.Globalization.CultureInfo("zh-TW"))</td>
+                                }
                                 <td class="align-middle">
                                     <button type="button" class="btn btn-success" onclick="updateNews(@news.NewsNo, 'editNewsTitle', 'editNewsContent')">確認</button>
                                     <span>&nbsp;&nbsp;</span>
                                     <button type="button" class="btn btn-secondary" onclick="cancelEdit(@news.NewsNo)">取消</button>
                                 </td>
                                 <!-- /ko -->
-                        </tr>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -125,14 +142,16 @@
         var newsTable = document.getElementById("newsTable");
 
         add.style.display = "block";
-        memberTable.style.display = "none";
+        newsTable.style.display = "none";
     }
 
-    function addNews(addNewsTitle, addNewsContent) {
+    function addNews(addNewsTypeNo, addNewsTitle, addNewsContent) {
+        var addNewsTypeNo = document.getElementById(addNewsTitle).value;
         var addNewsTitle = document.getElementById(addNewsTitle).value;
         var addNewsContent = document.getElementById(addNewsContent).value
 
         let args = {
+            NewsTypeNo: addNewsTypeNo,
             NewsTitle: addNewsTitle,
             NewsContent: addNewsContent
         };
@@ -163,7 +182,7 @@
         var newsTable = document.getElementById("newsTable");
 
         add.style.display = "none";
-        memberTable.style.display = "inline-table";
+        newsTable.style.display = "inline-table";
     }
 
     function editNews(data) {
@@ -178,7 +197,6 @@
     function updateNews(newsNo, NewsTitle, NewsContent) {
         var newsTitle = document.getElementById(NewsTitle).value;
         var newsContent = document.getElementById(NewsContent).value;
-        var today = new Date().toISOString().substring(0, 10);
 
         this.IsEdit(false);
         this.IsClickEdit(false);
@@ -187,7 +205,7 @@
         let args = {
             NewsNo: newsNo,
             NewsTitle: newsTitle,
-            NewsContent: newsContent,
+            NewsContent: newsContent
         };
 
         $.ajax({

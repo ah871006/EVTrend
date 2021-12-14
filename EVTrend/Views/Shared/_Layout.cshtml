@@ -41,10 +41,10 @@
                             <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedElec" asp-action="Index" id="MgtDetailedElec" style="display: none;">細部電動車數據管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="News" asp-controller="MgtNews" asp-action="Index" id="MgtNews" style="display: none;">最新消息管理</a>
+                            <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index" id="ShowNews" style="display: block;">最新消息</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index" id="ShowNews" style="display: block;">最新消息</a>
+                            <a class="nav-link text-light" asp-area="News" asp-controller="MgtNews" asp-action="Index" id="MgtNews" style="display: none;">最新消息管理</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="Member" asp-controller="Member" asp-action="Index" id="ShowMember" style="display: none;">會員中心</a>
@@ -88,6 +88,7 @@
             if (response != null) {
                 //抓Object
                 var DetailedElecCarbon = document.getElementById("DetailedElecCarbon");
+                var ShowNews = document.getElementById("ShowNews");
                 var ShowMember = document.getElementById("ShowMember");
                 var Log = document.getElementById("Log");
                 var Register = document.getElementById("Register");
@@ -117,9 +118,10 @@
                     var MgtNews = document.getElementById("MgtNews");
                     var MgtMember = document.getElementById("MgtMember");
 
-                    //管理員隱藏數據圖表、會員中心的功能
+                    //管理員隱藏數據圖表、最新消息、會員中心的功能
                     TotalElecCarbon.style.display = "none";
                     DetailedElecCarbon.style.display = "none";
+                    ShowNews.style.display = "none";
                     ShowMember.style.display = "none";
 
                     //管理員才可以管理資料
