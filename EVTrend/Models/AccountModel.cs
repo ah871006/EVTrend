@@ -50,19 +50,19 @@ namespace EVTrend.Models
         public string Gender { get; set; }
 
         [Display(Name = "生日")]
-        public DateTime? Birthday { get; set; }
+        public DateTime Birthday { get; set; }
 
         //帳號建立時間
         public DateTime CreateTime { get; set; }
 
         //帳號修改時間
-        public DateTime ModifyTime { get; set; }
+        public DateTime? ModifyTime { get; set; }
 
         //帳號啟用時間
         public DateTime AccountStart { get; set; }
 
         //帳號停用時間
-        public DateTime AccountEnd { get; set; }
+        public DateTime? AccountEnd { get; set; }
 
         public List<SelectListItem> Genders { get; } = new List<SelectListItem>
         {

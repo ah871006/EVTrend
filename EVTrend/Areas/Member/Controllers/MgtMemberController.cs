@@ -44,8 +44,10 @@ namespace EVTrend.Areas.Member.Controllers
                 model.Username = row.ItemArray.GetValue(2).ToString();
                 model.Gender = row.ItemArray.GetValue(3).ToString();
                 model.Birthday = DateTime.Parse(row.ItemArray.GetValue(4).ToString());
-                model.StatusNo = row.ItemArray.GetValue(5).ToString();
-                model.StatusName = row.ItemArray.GetValue(6).ToString();
+                model.CreateTime = DateTime.Parse(row.ItemArray.GetValue(5).ToString());
+                model.ModifyTime = string.IsNullOrWhiteSpace(row.ItemArray.GetValue(6).ToString()) ? (DateTime?)null : DateTime.Parse(row.ItemArray.GetValue(6).ToString());
+                model.StatusNo = row.ItemArray.GetValue(7).ToString();
+                model.StatusName = row.ItemArray.GetValue(8).ToString();
 
                 list.Add(model);
             }
@@ -59,7 +61,7 @@ namespace EVTrend.Areas.Member.Controllers
         /// <returns></returns>
         private DataTable GetMember()
         {
-            var sqlStr = string.Format("SELECT m.MemberNo, m.Account, m.Username, m.Gender, m.Birthday, m.StatusNo, s.StatusName FROM member m " +
+            var sqlStr = string.Format("SELECT m.MemberNo, m.Account, m.Username, m.Gender, m.Birthday, m.CreateTime, m.ModifyTime, m.StatusNo, s.StatusName FROM member m " +
                 "LEFT JOIN status s on m.StatusNo = s.StatusNo " +
                 "ORDER BY StatusNo, Account ASC");
 
