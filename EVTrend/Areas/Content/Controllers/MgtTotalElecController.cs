@@ -121,6 +121,48 @@ namespace EVTrend.Areas.Content.Controllers
 
         }
 
+        /// <summary>
+        /// 取得特定國家電動車數據
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public List<MgtTotalElecModel> GetCountryElec(MgtTotalElecModel Model)
+        {
+
+            var sqlStr = string.Format(
+                "SELECT TotalRegisterNo, TotalRegisterYear, YearName, TotalRegisterCountryNo, countryName,T_RegisterNumber,TotalRegisterNumber,TotalRegisterCreateTime,TotalRegisterModifyTime FROM evtrend.`total_registercar` as a " +
+                "inner join evtrend.`countries` as b " +
+                "on a.TotalRegisterCountryNo = b.CountryNo " +
+                "inner join evtrend.`years` as c " +
+                "on a.TotalRegisterYear = c.YearNo " +
+                "WHERE TotalRegisterCountryNo = {0} " +
+                "ORDER BY CountryName,YearName ASC", SqlVal2(Model.CountryNo));
+            var data = _DB_GetData(sqlStr);
+            List<MgtTotalElecModel> list = new List<MgtTotalElecModel>();
+            foreach (DataRow row in data.Rows)
+            {
+                MgtTotalElecModel model = new MgtTotalElecModel();
+                model.TotalRegisterNo = (int)row.ItemArray.GetValue(0);
+                model.YearNo = (int)row.ItemArray.GetValue(1);
+                model.Year = row.ItemArray.GetValue(2).ToString();
+                model.CountryNo = (int)row.ItemArray.GetValue(3);
+                model.Country = row.ItemArray.GetValue(4).ToString();
+                model.ElecRegisterNumber = (float)row.ItemArray.GetValue(5);
+                model.TotalRegisterNumber = (float)row.ItemArray.GetValue(6);
+                model.CreateTime = row.ItemArray.GetValue(7).ToString();
+                if (row.ItemArray.GetValue(8).ToString() == "")
+                {
+                    model.ModifyTime = "NULL";
+                }
+                else
+                {
+                    model.ModifyTime = row.ItemArray.GetValue(8).ToString();
+                }
+                list.Add(model);
+            }
+            return list;
+
+        }
 
 
         /// <summary>
