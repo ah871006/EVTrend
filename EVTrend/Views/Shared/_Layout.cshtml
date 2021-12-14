@@ -41,7 +41,7 @@
                             <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedElec" asp-action="Index" id="MgtDetailedElec" style="display: none;">細部電動車數據管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index" id="ShowNews" style="display: block;">最新消息</a>
+                            <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index" id="ShowNews">最新消息</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="News" asp-controller="MgtNews" asp-action="Index" id="MgtNews" style="display: none;">最新消息管理</a>
@@ -88,7 +88,6 @@
             if (response != null) {
                 //抓Object
                 var DetailedElecCarbon = document.getElementById("DetailedElecCarbon");
-                var ShowNews = document.getElementById("ShowNews");
                 var ShowMember = document.getElementById("ShowMember");
                 var Log = document.getElementById("Log");
                 var Register = document.getElementById("Register");
@@ -115,6 +114,7 @@
                     var MgtTotalElec = document.getElementById("MgtTotalElec");
                     var MgtDetailedCarbon = document.getElementById("MgtDetailedCarbon");
                     var MgtDetailedElec = document.getElementById("MgtDetailedElec");
+                    var ShowNews = document.getElementById("ShowNews");
                     var MgtNews = document.getElementById("MgtNews");
                     var MgtMember = document.getElementById("MgtMember");
 
