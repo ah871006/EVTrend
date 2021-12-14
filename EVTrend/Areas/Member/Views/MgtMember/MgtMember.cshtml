@@ -78,86 +78,122 @@
                             <th scope="col">性別</th>
                             <th scope="col">生日</th>
                             <th scope="col">身分類型</th>
+                            <th scope="col">創建時間</th>
+                            <th scope="col">修改時間</th>
                             <th scope="col">執行動作</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (MemberModels item in member)
                         {
-                            <tr>
-                                <!-- ko ifnot: IsEdit() && Item() == @item.MemberNo -->
-                                <td class="align-middle">@item.Account</td>
-                                <td class="align-middle">@item.Username</td>
+                        <tr>
+                            <!-- ko ifnot: IsEdit() && Item() == @item.MemberNo -->
+                            <td class="align-middle">@item.Account</td>
+                            <td class="align-middle">@item.Username</td>
+                            <td class="align-middle">
+                                <!-- ko if: @item.Gender == 1 -->
+                                <span>男</span>
+                                <!-- /ko -->
+                                <!-- ko if: @item.Gender == 2 -->
+                                <span>女</span>
+                                <!-- /ko -->
+                                <!-- ko if: @item.Gender == 3 -->
+                                <span>不願透露</span>
+                                <!-- /ko -->
+                            </td>
+                            <td class="align-middle">@item.Birthday.ToString("D", new System.Globalization.CultureInfo("zh-TW"))</td>
+                            <td class="align-middle">@item.StatusName</td>
+                            <td class="align-middle">
+                                <span>@item.CreateTime.ToString("yyyy/MM/dd")</span>
+                                <br>
+                                <span>@item.CreateTime.ToString("HH:mm")</span>
+                            </td>
+                            @if (item.ModifyTime == null)
+                            {
+                                <td class="align-middle">N/A</td>
+                            }
+                            else
+                            {
                                 <td class="align-middle">
+                                    <span>@item.ModifyTime.Value.ToString("yyyy/MM/dd")</span>
+                                    <br>
+                                    <span>@item.ModifyTime.Value.ToString("HH:mm")</span>
+                                </td>
+                            }
+                            <td class="align-middle">
+                                <!-- ko if: IsClickEdit() && Item() != @item.MemberNo -->
+                                <button type="button" class="btn btn-primary" disabled="disabled">修改</button>
+                                <span>&nbsp;&nbsp;</span>
+                                <button type="button" class="btn btn-danger" disabled="disabled">刪除</button>
+                                <!-- /ko -->
+                                <!-- ko ifnot: IsClickEdit() -->
+                                <button type="button" class="btn btn-primary" id="Edit" onclick="editMember('@item.MemberNo')">修改</button>
+                                <span>&nbsp;&nbsp;</span>
+                                <button type="button" class="btn btn-danger" onclick="deleteMember('@item.MemberNo')">刪除</button>
+                                <!-- /ko -->
+                            </td>
+                            <!-- /ko -->
+                        </tr>
+                        <tr>
+                            <!-- ko if: IsEdit() && Item() == @item.MemberNo -->
+                            <td class="align-middle" id="Account">@item.Account</td>
+                            <td class="align-middle">
+                                <input type="text" class="form-control" id="Username" name="Username" value="@item.Username" style="width: 105px;">
+                            </td>
+                            <td class="align-middle">
+                                <select class="form-control" id="Gender" name="Gender">
                                     <!-- ko if: @item.Gender == 1 -->
-                                    <span>男</span>
+                                    <option value=@item.Gender style="display: none;">男</option>
                                     <!-- /ko -->
                                     <!-- ko if: @item.Gender == 2 -->
-                                    <span>女</span>
+                                    <option value=@item.Gender style="display: none;">女</option>
                                     <!-- /ko -->
                                     <!-- ko if: @item.Gender == 3 -->
-                                    <span>不願透露</span>
+                                    <option value=@item.Gender style="display: none;">不願透露</option>
                                     <!-- /ko -->
-                                </td>
-                                <td class="align-middle">@item.Birthday.Value.ToString("D", new System.Globalization.CultureInfo("zh-TW"))</td>
-                                <td class="align-middle">@item.StatusName</td>
-                                <td class="align-middle">
-                                    <!-- ko if: IsClickEdit() && Item() != @item.MemberNo -->
-                                    <button type="button" class="btn btn-primary" disabled="disabled">修改</button>
-                                    <span>&nbsp;&nbsp;</span>
-                                    <button type="button" class="btn btn-danger" disabled="disabled">刪除</button>
-                                    <!-- /ko -->
-                                    <!-- ko ifnot: IsClickEdit() -->
-                                    <button type="button" class="btn btn-primary" id="Edit" onclick="editMember('@item.MemberNo')">修改</button>
-                                    <span>&nbsp;&nbsp;</span>
-                                    <button type="button" class="btn btn-danger" onclick="deleteMember('@item.MemberNo')">刪除</button>
-                                    <!-- /ko -->
-                                </td>
-                                <!-- /ko -->
-                            </tr>
-                            <tr>
-                                <!-- ko if: IsEdit() && Item() == @item.MemberNo -->
-                                <td class="align-middle" id="Account">@item.Account</td>
-                                <td class="align-middle">
-                                    <input type="text" class="form-control" id="Username" name="Username" value="@item.Username">
-                                </td>
-                                <td class="align-middle">
-                                    <select class="form-control" id="Gender" name="Gender">
-                                        <!-- ko if: @item.Gender == 1 -->
-                                        <option value=@item.Gender style="display: none;">男</option>
-                                        <!-- /ko -->
-                                        <!-- ko if: @item.Gender == 2 -->
-                                        <option value=@item.Gender style="display: none;">女</option>
-                                        <!-- /ko -->
-                                        <!-- ko if: @item.Gender == 3 -->
-                                        <option value=@item.Gender style="display: none;">不願透露</option>
-                                        <!-- /ko -->
-                                        <option value="1">男</option>
-                                        <option value="2">女</option>
-                                        <option value="3">不願透漏</option>
-                                    </select>
-                                </td>
-                                <td class="align-middle">
-                                    <input type="date" class="form-control" name="Birthday" id="Birthday" value="@item.Birthday.Value.ToString("yyyy-MM-dd")">
-                                </td>
-                                <td class="align-middle">
-                                    <select class="form-control" name="StatusNo" id="StatusNo">
-                                        @{ List<StatusModels> status = (List<StatusModels>)ViewData["Status"];
-                                            <option value=@item.StatusNo style="display: none;">@item.StatusName</option>
-                                            foreach (var s in status)
-                                            {
-                                                <option value=@s.StatusNo>@s.StatusName</option>
-                                            }
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                    <option value="3">不願透漏</option>
+                                </select>
+                            </td>
+                            <td class="align-middle">
+                                <input type="date" class="form-control" name="Birthday" id="Birthday" value="@item.Birthday.ToString("yyyy-MM-dd")">
+                            </td>
+                            <td class="align-middle">
+                                <select class="form-control" name="StatusNo" id="StatusNo">
+                                    @{ List<StatusModels> status = (List<StatusModels>)ViewData["Status"];
+                                        <option value=@item.StatusNo style="display: none;">@item.StatusName</option>
+                                        foreach (var s in status)
+                                        {
+                                            <option value=@s.StatusNo>@s.StatusName</option>
                                         }
-                                    </select>
-                                </td>
+                                    }
+                                </select>
+                            </td>
+                            <td class="align-middle">
+                                <span>@item.CreateTime.ToString("yyyy/MM/dd")</span>
+                                <br>
+                                <span>@item.CreateTime.ToString("HH:mm")</span>
+                            </td>
+                            @if (item.ModifyTime == null)
+                            {
+                                <td class="align-middle">N/A</td>
+                            }
+                            else
+                            {
                                 <td class="align-middle">
-                                    <button type="button" class="btn btn-success" onclick="saveMember(@item.MemberNo, 'Account', 'Username', 'Gender', 'Birthday', 'StatusNo')">確認</button>
-                                    <span>&nbsp;&nbsp;</span>
-                                    <button type="button" class="btn btn-secondary" onclick="cancelEdit(@item.MemberNo)">取消</button>
+                                    <span>@item.ModifyTime.Value.ToString("yyyy/MM/dd")</span>
+                                    <br>
+                                    <span>@item.ModifyTime.Value.ToString("HH:mm")</span>
                                 </td>
-                                <!-- /ko -->
-                            </tr>
+                            }
+                            <td class="align-middle">
+                                <button type="button" class="btn btn-success" onclick="saveMember(@item.MemberNo, 'Account', 'Username', 'Gender', 'Birthday', 'StatusNo')">確認</button>
+                                <span>&nbsp;&nbsp;</span>
+                                <button type="button" class="btn btn-secondary" onclick="cancelEdit(@item.MemberNo)">取消</button>
+                            </td>
+                            <!-- /ko -->
+                        </tr>
                         }
                     </tbody>
                 </table>

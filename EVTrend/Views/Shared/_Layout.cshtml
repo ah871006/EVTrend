@@ -41,6 +41,9 @@
                             <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedElec" asp-action="Index" id="MgtDetailedElec" style="display: none;">細部電動車數據管理</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index" id="ShowNews">最新消息</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-light" asp-area="News" asp-controller="MgtNews" asp-action="Index" id="MgtNews" style="display: none;">最新消息管理</a>
                         </li>
                         <li class="nav-item">
@@ -111,12 +114,14 @@
                     var MgtTotalElec = document.getElementById("MgtTotalElec");
                     var MgtDetailedCarbon = document.getElementById("MgtDetailedCarbon");
                     var MgtDetailedElec = document.getElementById("MgtDetailedElec");
+                    var ShowNews = document.getElementById("ShowNews");
                     var MgtNews = document.getElementById("MgtNews");
                     var MgtMember = document.getElementById("MgtMember");
 
-                    //管理員隱藏數據圖表、會員中心的功能
+                    //管理員隱藏數據圖表、最新消息、會員中心的功能
                     TotalElecCarbon.style.display = "none";
                     DetailedElecCarbon.style.display = "none";
+                    ShowNews.style.display = "none";
                     ShowMember.style.display = "none";
 
                     //管理員才可以管理資料

@@ -1,5 +1,52 @@
 ﻿@using EVTrend.Areas.Content.Models
 @using System.Data
+<style>
+    .aa {
+        background-color: black;
+        border-radius: 1rem;
+        border: none;
+        padding: 0.3rem 0.5rem;
+        color: white;
+    }
+
+    div.title {
+        display: flex;
+        flex-direction: row;
+        justify-content: center
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        padding: 0.5rem 1.5rem
+    }
+</style>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#flip").click(function () {
+            $("#panel").slideToggle("speed");
+        });
+    });
+    $(document).ready(function () {
+        $("#flip2").click(function () {
+            $("#panel2").slideToggle("speed");
+        });
+    });
+</script>
+
+<style type="text/css">
+
+    #panel {
+
+        display: none;
+    }
+    #panel2 {
+        display: none;
+    }
+</style>
+
 
 @{
     ViewData["Title"] = "總體碳排量與電動車數據";
@@ -9,44 +56,231 @@
     IEnumerable<TotalElecModel> TotalElecs = ViewData["TotalElec"] as IEnumerable<TotalElecModel>;
     IEnumerable<TotalCarbonModel> TotalCarbons = ViewData["TotalCarbon"] as IEnumerable<TotalCarbonModel>;
 }
-<h1>@ViewData["Title"]</h1>
-<table>
-    <tr>
-        <th>年分</th>
-        <th>國家</th>
-        <th>電動車領牌數</th>
-        <th>全部車種領牌數</th>
-        <th>比例</th>
-    </tr>
-    @foreach (TotalElecModel TotalElec in TotalElecs)
-    {
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<br />
+<br />
+<div class="title">
+
+    <h1>@ViewData["Title"]</h1>
+</div>
+<br />
+<br />
+
+
+<div id="chart">
+
+</div>
+
+<button class="aa" id="flip">顯示詳細資訊</button>
+
+<br />
+<br />
+<br />
+
+<div id="panel">
+    <table>
         <tr>
-            <td>@TotalElec.Year</td>
-            <td>@TotalElec.Country</td>
-            <td>@TotalElec.ElecRegisterNumber</td>
-            <td>@TotalElec.TotalRegisterNumber</td>
-            <td>@TotalElec.Percentage</td>
+            <th>年分</th>
+            <th>國家</th>
+            <th>運輸業碳排量(單位：千公噸)</th>
+            <th>總體碳排量(單位：千公噸)</th>
+            <th>比例</th>
         </tr>
-    }
-</table>
-<p>TotalCarbon_Table</p>
-<table>
-    <tr>
-        <th>年分</th>
-        <th>國家</th>
-        <th>運輸業碳排量(單位：千公噸)</th>
-        <th>總體碳排量(單位：千公噸)</th>
-        <th>比例</th>
-    </tr>
-    @foreach (TotalCarbonModel TotalCarbon in TotalCarbons)
-    {
-        <tr>
-            <td>@TotalCarbon.Year</td>
-            <td>@TotalCarbon.Country</td>
-            <td>@TotalCarbon.T_CarbonNumber</td>
-            <td>@TotalCarbon.TotalCarbonNumber</td>
-            <td>@TotalCarbon.Percentage</td>
-        </tr>
-    }
-</table>
+        @foreach (TotalCarbonModel TotalCarbon in TotalCarbons)
+        {
+            <tr>
+                <td>@TotalCarbon.Year</td>
+                <td>@TotalCarbon.Country</td>
+                <td>@TotalCarbon.T_CarbonNumber</td>
+                <td>@TotalCarbon.TotalCarbonNumber</td>
+                <td>@TotalCarbon.Percentage</td>
+            </tr>
+        }
+    </table>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <div id="chart1">
+
+    </div>
+
+    <button class="aa" id="flip2">顯示詳細資訊</button>
+    <br />
+    <br />
+    <br />
+    <div id="panel2">
+        <table>
+            <tr>
+                <th>年分</th>
+                <th>國家</th>
+                <th>電動車領牌數</th>
+                <th>全部車種領牌數</th>
+                <th>比例</th>
+            </tr>
+            @foreach (TotalElecModel TotalElec in TotalElecs)
+            {
+                <tr>
+                    <td>@TotalElec.Year</td>
+                    <td>@TotalElec.Country</td>
+                    <td>@TotalElec.ElecRegisterNumber</td>
+                    <td>@TotalElec.TotalRegisterNumber</td>
+                    <td>@TotalElec.Percentage</td>
+                </tr>
+            }
+        </table>
+        </div>
+
+
+        <script type="text/javascript">
+
+            var options = {
+                series: [
+                    {
+                        name: "運輸業碳排比例/總碳排(台灣)",
+                        data: [28, 29, 33, 36, 32]
+                    },
+                    {
+                        name: "運輸業碳排比例/總碳排(美國)",
+                        data: [12, 11, 14, 18, 17]
+                    }
+                ],
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#000',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 0.2
+                    },
+                    toolbar: {
+                        show: false
+                    }
+                },
+                colors: ['#77B6EA', '#545454'],
+                dataLabels: {
+                    enabled: true,
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                title: {
+                    text: '台灣美國碳排量比較',
+                    align: 'left'
+                },
+                grid: {
+                    borderColor: '#e7e7e7',
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                markers: {
+                    size: 1
+                },
+                xaxis: {
+                    categories: ['2014', '2015', '2016', '2017', '2018'],
+                    title: {
+                        text: '年分'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: '百分比'
+                    },
+                    min: 5,
+                    max: 40
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: -25,
+                    offsetX: -5
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+
+            var options1 = {
+                series: [
+                    {
+                        name: "電動車領牌數/總領牌數(台灣)",
+                        data: [28, 29, 33, 36, 32]
+                    },
+                    {
+                        name: "電動車領牌數/總領牌數(美國)",
+                        data: [12, 11, 14, 18, 17]
+                    }
+                ],
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#000',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 0.2
+                    },
+                    toolbar: {
+                        show: false
+                    }
+                },
+                colors: ['#77B6EA', '#545454'],
+                dataLabels: {
+                    enabled: true,
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                title: {
+                    text: '台灣美國碳排量比較',
+                    align: 'left'
+                },
+                grid: {
+                    borderColor: '#e7e7e7',
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                markers: {
+                    size: 1
+                },
+                xaxis: {
+                    categories: ['2014', '2015', '2016', '2017', '2018'],
+                    title: {
+                        text: '年分'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: '百分比'
+                    },
+                    min: 5,
+                    max: 40
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: -25,
+                    offsetX: -5
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart1"), options1);
+            chart.render();
+
+        </script>
+
+
 

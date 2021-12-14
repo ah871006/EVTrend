@@ -123,6 +123,65 @@ namespace EVTrend.Areas.Content.Controllers
         }
 
 
+        /// <summary>
+        /// 取得特定國家總體碳排量數據
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public List<MgtTotalCarbonModel> GetCountryTotalCarbon(MgtTotalCarbonModel Model)
+        {
+            var sqlStr = "";
+            if (Model.CountryNo == 0) //選擇全部
+            {
+                sqlStr = string.Format(
+                                "SELECT TotalCarbonNo, TotalCarbonYear, YearName, TotalCarbonCountryNo, countryName,T_CarbonNumber,TotalCarbonNumber,TotalCarbonCreateTime,TotalCarbonModifyTime FROM evtrend.`total_carbon` as a " +
+                                "inner join evtrend.`countries` as b " +
+                                "on a.TotalCarbonCountryNo = b.CountryNo " +
+                                "inner join evtrend.`years` as c " +
+                                "on a.TotalCarbonYear = c.YearNo " + 
+                                "ORDER BY CountryName,YearName ASC", SqlVal2(Model.CountryNo));
+
+            }
+            else //選擇台灣或美國
+            {
+                sqlStr = string.Format(
+                                "SELECT TotalCarbonNo, TotalCarbonYear, YearName, TotalCarbonCountryNo, countryName,T_CarbonNumber,TotalCarbonNumber,TotalCarbonCreateTime,TotalCarbonModifyTime FROM evtrend.`total_carbon` as a " +
+                                "inner join evtrend.`countries` as b " +
+                                "on a.TotalCarbonCountryNo = b.CountryNo " +
+                                "inner join evtrend.`years` as c " +
+                                "on a.TotalCarbonYear = c.YearNo " +
+                                "WHERE TotalCarbonCountryNo = {0} " +
+                                "ORDER BY CountryName,YearName ASC", SqlVal2(Model.CountryNo));
+
+            }
+            var data = _DB_GetData(sqlStr);
+            List<MgtTotalCarbonModel> list = new List<MgtTotalCarbonModel>();
+            foreach (DataRow row in data.Rows)
+            {
+                MgtTotalCarbonModel model = new MgtTotalCarbonModel();
+                model.TotalCarbonNo = (int)row.ItemArray.GetValue(0);
+                model.YearNo = (int)row.ItemArray.GetValue(1);
+                model.Year = row.ItemArray.GetValue(2).ToString();
+                model.CountryNo = (int)row.ItemArray.GetValue(3);
+                model.Country = row.ItemArray.GetValue(4).ToString();
+                model.T_CarbonNumber = (float)row.ItemArray.GetValue(5);
+                model.TotalCarbonNumber = (float)row.ItemArray.GetValue(6);
+                model.CreateTime = row.ItemArray.GetValue(7).ToString();
+                if (row.ItemArray.GetValue(8).ToString() == "")
+                {
+                    model.ModifyTime = "NULL";
+                }
+                else
+                {
+                    model.ModifyTime = row.ItemArray.GetValue(8).ToString();
+                }
+                list.Add(model);
+            }
+            return list;
+
+        }
+
+
 
         /// <summary>
         /// 新增總體碳排量數據
