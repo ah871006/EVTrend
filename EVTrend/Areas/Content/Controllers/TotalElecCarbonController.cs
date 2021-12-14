@@ -54,8 +54,8 @@ namespace EVTrend.Areas.Content.Controllers
             return data;
         }
 
-
-        private List<TotalElecModel> GetTotalElecModel()
+        [HttpGet]
+        public List<TotalElecModel> GetTotalElecModel()
         {
             var data = GetTotalElec();
             List<TotalElecModel> list = new List<TotalElecModel>();
@@ -70,14 +70,15 @@ namespace EVTrend.Areas.Content.Controllers
 
                 //計算電動車數量/總車種數量 => 得到百分比
                 var CarPercentage = (float)row.ItemArray.GetValue(2) / (float)row.ItemArray.GetValue(3);
-                model.Percentage = (float)Math.Round((Decimal)CarPercentage, 7);
+                model.Percentage = (float)Math.Round((Decimal)CarPercentage, 5) * 1000;
 
                 list.Add(model);
             }
             return list;
         }
 
-        private List<TotalCarbonModel> GetTotalCarbonModel()
+        [HttpGet]
+        public List<TotalCarbonModel> GetTotalCarbonModel()
         {
             var data = GetTotalCarbon();
             List<TotalCarbonModel> list = new List<TotalCarbonModel>();
@@ -91,7 +92,7 @@ namespace EVTrend.Areas.Content.Controllers
 
                 //計算運輸業碳排數量/總碳排數量 => 得到百分比
                 var CarbonPercentage = (float)row.ItemArray.GetValue(2) / (float)row.ItemArray.GetValue(3);
-                model.Percentage = (float)Math.Round((Decimal)CarbonPercentage, 7);
+                model.Percentage = (float)Math.Round((Decimal)CarbonPercentage, 5) * 100;
 
                 list.Add(model);
             }
