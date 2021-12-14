@@ -35,7 +35,7 @@ namespace EVTrend.Areas.News.Controllers
             news.CreateTime = DateTime.Parse(row.ItemArray.GetValue(5).ToString());
             if (row.ItemArray.GetValue(6).ToString() != "")
             {
-                news.ModifyTime = DateTime.ParseExact(row.ItemArray.GetValue(6).ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+                news.ModifyTime = DateTime.Parse(row.ItemArray.GetValue(6).ToString());
             }
             // news.NewsEnd = DateTime.Parse(row.ItemArray.GetValue(7).ToString());
             news.NewsCreateUser = row.ItemArray.GetValue(8).ToString();
