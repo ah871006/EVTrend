@@ -85,7 +85,7 @@
             <th>國家</th>
             <th>運輸業碳排量(單位：千公噸)</th>
             <th>總體碳排量(單位：千公噸)</th>
-            <th>比例</th>
+            <th>百分比(單位：%)</th>
         </tr>
         @foreach (TotalCarbonModel TotalCarbon in TotalCarbons)
         {
@@ -118,7 +118,7 @@
                 <th>國家</th>
                 <th>電動車領牌數</th>
                 <th>全部車種領牌數</th>
-                <th>比例</th>
+                <th>千分比(單位：‰)</th>
             </tr>
             @foreach (TotalElecModel TotalElec in TotalElecs)
             {
@@ -135,16 +135,127 @@
 
 
         <script type="text/javascript">
+            
+            //取得array
+            function getColumn(anArray, column, country) {
+                var result = anArray.filter(anArray => anArray.country == country);
+                var extractColumn = result.map(x => x[column]);
+                return extractColumn
+
+            }
+
+            //取得Carbon資料
+            function getCarbonData() {
+                var A_percentage_arr=[]
+                var T_percentage_arr=[]
+                var year_arr=[]
+                
+                $.ajax({
+                    type: "GET",
+                    url: "TotalElecCarbon/GetTotalCarbonModel",
+                    async: false,
+                    beforeSend: function () {
+
+                    },
+                    success: function (result) {
+                        //console.log(result);
+                        //result.forEach
+                        //var deptName = result[1].t_CarbonNumber
+                        A_percentage_arr = getColumn(result, 'percentage', '美國')
+                        //console.log(A_percentage_arr)
+                        T_percentage_arr = getColumn(result, 'percentage', '臺灣')
+                        //console.log(T_percentage_arr)
+                        year_arr = result.map(x => x['year'])
+                        
+                        //console.log(year_arr)
+                        
+
+                        //console.log(x)
+                        //var gradNum = result.graduationNumber
+                        //var inum = []
+                        //deptName.forEach((v, i) => inum.push({ "deptName": deptName[i], "studentNum": gradNum[i] }));
+                        //inum = inum.sort((a, b) => b.studentNum - a.studentNum);
+
+
+
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+                console.log(A_percentage_arr)
+                return {
+                    A_percentage_arr: A_percentage_arr,
+                    T_percentage_arr: T_percentage_arr,
+                    year_arr: year_arr
+                };
+                
+                
+            }
+            var carbon_data = getCarbonData()
+            
+            //var year_arr = ["2014", "2015", "2016","2017"]
+
+            //取得Elec資料
+            function getElecData() {
+                var A_percentage_arr = []
+                var T_percentage_arr = []
+                var year_arr = []
+
+                $.ajax({
+                    type: "GET",
+                    url: "TotalElecCarbon/GetTotalElecModel",
+                    async: false,
+                    beforeSend: function () {
+
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        //result.forEach
+                        //var deptName = result[1].t_CarbonNumber
+                        A_percentage_arr = getColumn(result, 'percentage', '美國')
+                        //console.log(A_percentage_arr)
+                        T_percentage_arr = getColumn(result, 'percentage', '臺灣')
+                        //console.log(T_percentage_arr)
+                        year_arr = result.map(x => x['year'])
+
+                        //console.log(year_arr)
+
+
+                        //console.log(x)
+                        //var gradNum = result.graduationNumber
+                        //var inum = []
+                        //deptName.forEach((v, i) => inum.push({ "deptName": deptName[i], "studentNum": gradNum[i] }));
+                        //inum = inum.sort((a, b) => b.studentNum - a.studentNum);
+
+
+
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+                
+                return {
+                    A_percentage_arr: A_percentage_arr,
+                    T_percentage_arr: T_percentage_arr,
+                    year_arr: year_arr
+                };
+
+
+            }
+            var elec_data = getElecData()
+            console.log(elec_data)
 
             var options = {
                 series: [
                     {
                         name: "運輸業碳排比例/總碳排(台灣)",
-                        data: [28, 29, 33, 36, 32]
+                        data: carbon_data.T_percentage_arr
                     },
                     {
                         name: "運輸業碳排比例/總碳排(美國)",
-                        data: [12, 11, 14, 18, 17]
+                        data: carbon_data.A_percentage_arr
                     }
                 ],
                 chart: {
@@ -184,7 +295,7 @@
                     size: 1
                 },
                 xaxis: {
-                    categories: ['2014', '2015', '2016', '2017', '2018'],
+                    categories: carbon_data.year_arr,
                     title: {
                         text: '年分'
                     }
@@ -193,8 +304,8 @@
                     title: {
                         text: '百分比'
                     },
-                    min: 5,
-                    max: 40
+                    min: 0,
+                    max: 45
                 },
                 legend: {
                     position: 'top',
@@ -212,11 +323,11 @@
                 series: [
                     {
                         name: "電動車領牌數/總領牌數(台灣)",
-                        data: [28, 29, 33, 36, 32]
+                        data: elec_data.T_percentage_arr
                     },
                     {
                         name: "電動車領牌數/總領牌數(美國)",
-                        data: [12, 11, 14, 18, 17]
+                        data: elec_data.A_percentage_arr
                     }
                 ],
                 chart: {
@@ -242,7 +353,7 @@
                     curve: 'smooth'
                 },
                 title: {
-                    text: '台灣美國碳排量比較',
+                    text: '台灣美國領牌數比較',
                     align: 'left'
                 },
                 grid: {
@@ -256,17 +367,17 @@
                     size: 1
                 },
                 xaxis: {
-                    categories: ['2014', '2015', '2016', '2017', '2018'],
+                    categories: elec_data.year_arr,
                     title: {
                         text: '年分'
                     }
                 },
                 yaxis: {
                     title: {
-                        text: '百分比'
+                        text: '千分比'
                     },
-                    min: 5,
-                    max: 40
+                    min: 0,
+                    max: 80
                 },
                 legend: {
                     position: 'top',
