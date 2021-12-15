@@ -29,16 +29,16 @@
                             <a class="nav-link text-light" asp-area="Content" asp-controller="DetailedElecCarbon" asp-action="Index" id="DetailedElecCarbon" style="display: none;">細部數據圖表</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtTotalCarbon" asp-action="Index" id="MgtTotalCarbon" style="display: none;">總體碳排量管理</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtTotalCarbon" asp-action="Index" id="MgtTotalCarbon" style="display: none;">總體碳管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtTotalElec" asp-action="Index" id="MgtTotalElec" style="display: none;">總體電動車數據管理</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtTotalElec" asp-action="Index" id="MgtTotalElec" style="display: none;">總體電動車管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedCarbon" asp-action="Index" id="MgtDetailedCarbon" style="display: none;">細部碳排量管理</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedCarbon" asp-action="Index" id="MgtDetailedCarbon" style="display: none;">細部碳管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedElec" asp-action="Index" id="MgtDetailedElec" style="display: none;">細部電動車數據管理</a>
+                            <a class="nav-link text-light" asp-area="Content" asp-controller="MgtDetailedElec" asp-action="Index" id="MgtDetailedElec" style="display: none;">細部電動車管理</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="News" asp-controller="News" asp-action="Index" id="ShowNews">最新消息</a>
@@ -109,7 +109,6 @@
 
                 if (response == "0") { //管理員
                     //抓Object
-                    var TotalElecCarbon = document.getElementById("TotalElecCarbon");
                     var MgtTotalCarbon = document.getElementById("MgtTotalCarbon");
                     var MgtTotalElec = document.getElementById("MgtTotalElec");
                     var MgtDetailedCarbon = document.getElementById("MgtDetailedCarbon");
@@ -118,9 +117,7 @@
                     var MgtNews = document.getElementById("MgtNews");
                     var MgtMember = document.getElementById("MgtMember");
 
-                    //管理員隱藏數據圖表、最新消息、會員中心的功能
-                    TotalElecCarbon.style.display = "none";
-                    DetailedElecCarbon.style.display = "none";
+                    //管理員隱藏最新消息、會員中心的功能
                     ShowNews.style.display = "none";
                     ShowMember.style.display = "none";
 

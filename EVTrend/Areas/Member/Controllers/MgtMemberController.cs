@@ -63,7 +63,7 @@ namespace EVTrend.Areas.Member.Controllers
         {
             var sqlStr = string.Format("SELECT m.MemberNo, m.Account, m.Username, m.Gender, m.Birthday, m.CreateTime, m.ModifyTime, m.StatusNo, s.StatusName FROM member m " +
                 "LEFT JOIN status s on m.StatusNo = s.StatusNo " +
-                "ORDER BY StatusNo, Account ASC");
+                "ORDER BY m.Account, m.MemberNo ASC");
 
             var data = _DB_GetData(sqlStr);
             return data;

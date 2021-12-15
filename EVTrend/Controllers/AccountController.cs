@@ -211,17 +211,6 @@ namespace EVTrend.Controllers
         }
 
         /// <summary>
-        /// 忘記密碼 GET
-        /// </summary>
-        /// <param name="Account"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult ForgetPassword(string Account)
-        {
-            return View();
-        }
-
-        /// <summary>
         /// 確認登入狀態
         /// </summary>
         /// <returns></returns>
