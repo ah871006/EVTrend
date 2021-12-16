@@ -25,7 +25,7 @@ namespace EVTrend.Areas.Content.Controllers
             {
                 return Redirect("~/Home/Error");
             }
-            ViewData["GetTotalCarbon"] = GetTotalCarbon(Model.Country);
+            ViewData["GetTotalCarbon"] = GetCountryTotalCarbon(Model.CountryNo);
             ViewData["GetYear"] = GetYear();
             ViewData["GetCountry"] = GetCountry();
             ViewData["SelectCountryNo"] = Model.CountryNo;
@@ -129,18 +129,18 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public List<MgtTotalCarbonModel> GetCountryTotalCarbon(string CountryNo = null)
+        public List<MgtTotalCarbonModel> GetCountryTotalCarbon(int CountryNo = 0)
         {
             var sqlStr = "";
-            if (!string.IsNullOrEmpty(CountryNo)) //選擇全部
+            if (CountryNo == 0) //選擇全部
             {
                 sqlStr = string.Format(
                                 "SELECT TotalCarbonNo, TotalCarbonYear, YearName, TotalCarbonCountryNo, countryName,T_CarbonNumber,TotalCarbonNumber,TotalCarbonCreateTime,TotalCarbonModifyTime FROM evtrend.`total_carbon` as a " +
                                 "inner join evtrend.`countries` as b " +
                                 "on a.TotalCarbonCountryNo = b.CountryNo " +
                                 "inner join evtrend.`years` as c " +
-                                "on a.TotalCarbonYear = c.YearNo " + 
-                                "ORDER BY CountryName,YearName ASC", SqlVal2(CountryNo));
+                                "on a.TotalCarbonYear = c.YearNo " +
+                                "ORDER BY CountryName,YearName ASC");
 
             }
             else //選擇台灣或美國

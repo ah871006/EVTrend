@@ -195,20 +195,20 @@
             CountryNo: data
         };
         $.ajax({
-            url: '@Url.Action("SelectStatusNo")',
+            url: '@Url.Action("SelectCountryNo")',
             data: args,
             method: "POST",
             async: true,
             success: function (response) {
                 if (response) {
                     if (data != null && data != "-1") {
-                        window.location.href = window.location.href.split('?')[0] + "?StatusNo=" + data;
+                        window.location.href = window.location.href.split('?')[0] + "?CountryNo=" + data;
                     }
                     else {
                         window.location.href = window.location.href.split('?')[0];
                     }
                 } else {
-                    window.location.href = window.location.href.split('?')[0] + "?StatusNo=" + data;
+                    window.location.href = window.location.href.split('?')[0] + "?CountryNo=" + data;
                     alert("查無資料");
                 }
             },
