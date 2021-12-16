@@ -35,10 +35,32 @@ namespace EVTrend.Areas.News.Models
 
         [Display(Name = "消息修改者")]
         public string NewsModifyUser { get; set; }
+
+        [Display(Name = "消息連結")]
+        public string NewsLink { get; set; }
+    }
+    
+    public class NewsTypeModel
+    {
+        [Display(Name = "消息類型編號")]
+        public int NewsTypeNo { get; set; }
+
+        [Display(Name = "消息類型名稱")]
+        public string TypeName { get; set; }
+
+        [Display(Name = "消息類型描述")]
+        public string TypeDescription { get; set; }
+
+        [Display(Name = "創立時間")]
+        public DateTime CreateTime { get; set; }
+
+        [Display(Name = "修改時間")]
+        public DateTime ModifyTime { get; set; }
     }
 
     public class NewsPageModel
     {
         public List<NewsModel> News { get; } = new List<NewsModel>();
+        public List<NewsTypeModel> NewsTypes { get; } = new List<NewsTypeModel>();
     }
 }
