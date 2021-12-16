@@ -1,4 +1,5 @@
-﻿@model EVTrend.Areas.News.Models.NewsPageModel;
+﻿@using EVTrend.Areas.News.Models
+@model EVTrend.Areas.News.Models.NewsPageModel;
 @{
     ViewData["MgtTitle"] = "最新消息管理";
     ViewData["AddTitle"] = "新增消息";
@@ -25,7 +26,7 @@
                 <form method="POST" id="addNewsForm" name="addNewsForm">
                     <div class="col-12 form-inline">
                         <label>消息類型：</label>
-                        <select class="form-control required" id="addNewsTypeNo" name="addNewsTypeNo">
+                        <select class="form-control required" asp-items="@(new SelectList(Model.NewsTypes, nameof(NewsTypeModel.NewsTypeNo), nameof(NewsTypeModel.TypeName)))">
                         </select>
                     </div>
                     <br>
@@ -40,11 +41,16 @@
                     </div>
                     <br>
                     <div class="col-12 form-inline">
-                        <button type="submit" class="btn btn-success" onclick="addNews('addNewsTypeNo', 'addNewsTitle', 'addNewsContent'); return false;">確認</button>
+                        <label>連結：</label>
+                        <input type="text" class="form-control required" id="addNewsLink" name="addNewsLink">
+                    </div>
+                    <br>
+                    <div class="col-12 form-inline">
+                        <button type="submit" class="btn btn-success" onclick="addNews('addNewsTypeNo', 'addNewsTitle', 'addNewsContent', 'addNewsLink'); return false;">確認</button>
                         <span>&nbsp;&nbsp;</span>
                         <button type="button" class="btn btn-secondary" onclick="cancelAdd()">取消</button>
                     </div>
-                </form>
+                </form>                
             </div>
             <div class="col-12">
                 <table class="table" id="newsTable" name="newsTable" style="text-align: center;">
@@ -145,15 +151,17 @@
         newsTable.style.display = "none";
     }
 
-    function addNews(addNewsTypeNo, addNewsTitle, addNewsContent) {
+    function addNews(addNewsTypeNo, addNewsTitle, addNewsContent, addNewsLink) {
         var addNewsTypeNo = document.getElementById(addNewsTitle).value;
         var addNewsTitle = document.getElementById(addNewsTitle).value;
-        var addNewsContent = document.getElementById(addNewsContent).value
+        var addNewsContent = document.getElementById(addNewsContent).value;
+        var addNewsLink = document.getElementById(addNewsLink).value
 
         let args = {
             NewsTypeNo: addNewsTypeNo,
             NewsTitle: addNewsTitle,
-            NewsContent: addNewsContent
+            NewsContent: addNewsContent,
+            NewsLink: addNewsLink
         };
 
         $.ajax({

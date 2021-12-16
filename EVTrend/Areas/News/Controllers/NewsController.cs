@@ -18,7 +18,7 @@ namespace EVTrend.Areas.News.Controllers
 
         private DataTable GetAllNews()
         {
-            var sqlStr = string.Format("SELECT NewsNo, NewsTypeNo, NewsTitle, NewsContent, NewsHits, CreateTime, ModifyTime, NewsEnd, NewsCreateUser, NewsModifyUser from evtrend.`news`");
+            var sqlStr = string.Format("SELECT NewsNo, NewsTypeNo, NewsTitle, NewsContent, NewsHits, CreateTime, ModifyTime, NewsEnd, NewsCreateUser, NewsModifyUser, NewsLink from evtrend.`news`");
             var data = _DB_GetData(sqlStr);
             return data;
         }
@@ -40,6 +40,7 @@ namespace EVTrend.Areas.News.Controllers
             // news.NewsEnd = DateTime.Parse(row.ItemArray.GetValue(7).ToString());
             news.NewsCreateUser = row.ItemArray.GetValue(8).ToString();
             // news.NewsModifyUser = row.ItemArray.GetValue(9).ToString();
+            news.NewsLink = row.ItemArray.GetValue(10).ToString();
 
             return news;
         }
