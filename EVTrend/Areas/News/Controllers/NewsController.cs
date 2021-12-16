@@ -45,14 +45,43 @@ namespace EVTrend.Areas.News.Controllers
             return news;
         }
 
+        private NewsTypeModel ConvertRowToNewsTypeModel(DataRow row)
+        {
+            var newsType = new NewsTypeModel();
+
+            newsType.NewsTypeNo = (int)row.ItemArray.GetValue(0);
+            newsType.TypeName = row.ItemArray.GetValue(1).ToString();
+            newsType.TypeDescription = row.ItemArray.GetValue(2).ToString();
+            newsType.CreateTime = DateTime.Parse(row.ItemArray.GetValue(3).ToString());
+            if (row.ItemArray.GetValue(4).ToString() != "")
+            {
+                newsType.ModifyTime = DateTime.Parse(row.ItemArray.GetValue(4).ToString());
+            }
+            return newsType;
+        }
+
+        private DataTable GetAllNewsTypes()
+        {
+            var sqlStr = string.Format("SELECT NewsTypeNo, TypeName, TypeDescription, CreateTime, ModifyTime from evtrend.`news_type`");
+            var data = _DB_GetData(sqlStr);
+            return data;
+        }
+
         private NewsPageModel GetNewsPageModel()
         {
             var newsPageModel = new NewsPageModel();
 
             var news = GetAllNews();
+            var newsTypes = GetAllNewsTypes();
             foreach (DataRow row in news.Rows)
             {
                 newsPageModel.News.Add(ConvertRowToNewsModel(row));
+            }
+            foreach (DataRow row in newsTypes.Rows)
+            {
+                var newsTypeModel = ConvertRowToNewsTypeModel(row);
+                newsPageModel.NewsTypes.Add(newsTypeModel);
+                newsPageModel.NewsTypesDictionary[newsTypeModel.NewsTypeNo] = newsTypeModel;
             }
 
             return newsPageModel;

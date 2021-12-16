@@ -62,5 +62,7 @@ namespace EVTrend.Areas.News.Models
     {
         public List<NewsModel> News { get; } = new List<NewsModel>();
         public List<NewsTypeModel> NewsTypes { get; } = new List<NewsTypeModel>();
+
+        public Dictionary<int, NewsTypeModel> NewsTypesDictionary { get; } = new Dictionary<int, NewsTypeModel>();
     }
 }

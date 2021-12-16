@@ -72,7 +72,7 @@
                             <tr>
                                 <!-- ko ifnot: IsEdit() && Item() == @news.NewsNo -->
                                 <td class="align-middle">@news.NewsNo</td>
-                                <td class="align-middle">@news.NewsTypeNo</td>
+                                <td class="align-middle">@Model.NewsTypesDictionary[@news.NewsTypeNo].TypeName</td>
                                 <td class="align-middle">@news.NewsTitle</td>
                                 <td class="align-middle">@news.NewsContent</td>
                                 <td class="align-middle">@news.NewsHits</td>
