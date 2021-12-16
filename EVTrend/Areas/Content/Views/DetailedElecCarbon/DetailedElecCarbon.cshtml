@@ -34,6 +34,7 @@
             contentType: 'application/json',
             data: { "car_type_id": car_type.value},
             success: function (mydata) {
+                console.log(mydata)
                 var options = {
                     series: [{
                         name: '總領牌數',
