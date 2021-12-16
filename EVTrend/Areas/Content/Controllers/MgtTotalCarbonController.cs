@@ -18,16 +18,17 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(MgtTotalCarbonModel Model)
         {
             // admin check
             if (getUserStatusNo() != "0")
             {
                 return Redirect("~/Home/Error");
             }
-            ViewData["GetTotalCarbon"] = GetTotalCarbon();
+            ViewData["GetTotalCarbon"] = GetTotalCarbon(Model.Country);
             ViewData["GetYear"] = GetYear();
             ViewData["GetCountry"] = GetCountry();
+            ViewData["SelectCountryNo"] = Model.CountryNo;
             //ViewData["GetCountry"] = GetCountry();
             return View("MgtTotalCarbon");
         }
@@ -85,7 +86,7 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public List<MgtTotalCarbonModel> GetTotalCarbon()
+        public List<MgtTotalCarbonModel> GetTotalCarbon(string CountryNo = null)
         {
 
             var sqlStr = string.Format(
@@ -128,10 +129,10 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public List<MgtTotalCarbonModel> GetCountryTotalCarbon(MgtTotalCarbonModel Model)
+        public List<MgtTotalCarbonModel> GetCountryTotalCarbon(string CountryNo = null)
         {
             var sqlStr = "";
-            if (Model.CountryNo == 0) //選擇全部
+            if (!string.IsNullOrEmpty(CountryNo)) //選擇全部
             {
                 sqlStr = string.Format(
                                 "SELECT TotalCarbonNo, TotalCarbonYear, YearName, TotalCarbonCountryNo, countryName,T_CarbonNumber,TotalCarbonNumber,TotalCarbonCreateTime,TotalCarbonModifyTime FROM evtrend.`total_carbon` as a " +
@@ -139,7 +140,7 @@ namespace EVTrend.Areas.Content.Controllers
                                 "on a.TotalCarbonCountryNo = b.CountryNo " +
                                 "inner join evtrend.`years` as c " +
                                 "on a.TotalCarbonYear = c.YearNo " + 
-                                "ORDER BY CountryName,YearName ASC", SqlVal2(Model.CountryNo));
+                                "ORDER BY CountryName,YearName ASC", SqlVal2(CountryNo));
 
             }
             else //選擇台灣或美國
@@ -151,7 +152,7 @@ namespace EVTrend.Areas.Content.Controllers
                                 "inner join evtrend.`years` as c " +
                                 "on a.TotalCarbonYear = c.YearNo " +
                                 "WHERE TotalCarbonCountryNo = {0} " +
-                                "ORDER BY CountryName,YearName ASC", SqlVal2(Model.CountryNo));
+                                "ORDER BY CountryName,YearName ASC", SqlVal2(CountryNo));
 
             }
             var data = _DB_GetData(sqlStr);
@@ -312,6 +313,37 @@ namespace EVTrend.Areas.Content.Controllers
                 return false;
             }
 
+        }
+        public bool SelectCountryNo(MgtTotalCarbonModel Model)
+        {
+            // admin check
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
+            if (Model.CountryNo.ToString() != null && Model.CountryNo.ToString() != "-1")
+            {
+                if (GetTotalCarbon(Model.CountryNo.ToString()).Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (GetTotalCarbon().Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }

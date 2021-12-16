@@ -33,11 +33,47 @@
         </select>
     </div>-->
                 <div>
-                    <button type="button" class="btn btn-primary" onclick="add()">新增</button>
-                </div>
+                    <div class="col-12 form-inline">
+                        <label>國家：</label>
+                        @if (ViewData["SelectCountryNo"] != null)
+                        {
+                            <select class="form-control" name="selectCountryNo" id="selectCountryNo" onchange="select(this.value);">
+                                <option value="-1">------</option>
+                                @{ List<CountryModel> SelectCountry = (List<CountryModel>)ViewData["GetCountry"];
+                                    foreach (var select in SelectCountry)
+                                    {
+                                        if (select.CountryNo.ToString() == ViewData["SelectCountryNo"].ToString())
+                                        {
+                                            <option value=@select.CountryNo.ToString() selected>@select.CountryName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value=@select.CountryNo.ToString()>@select.CountryName</option>
+                                        }
+                                    }
+                                }
 
-                <!-- /ko -->
-            </div>
+                            </select>
+                        }
+                        else
+                        {
+                            <select class="form-control" name="selectCountryNo" id="selectCountrysNo" onchange="select(this.value);">
+                                <option value="-1" selected>------</option>
+                                @{ List<CountryModel> SelectCountry = (List<CountryModel>)ViewData["GetCountry"];
+                                    foreach (var select in SelectCountry)
+                                    {
+                                        <option value=@select.CountryNo.ToString()>@select.CountryName</option>
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                        <button type="button" class="btn btn-primary" onclick="add()">新增</button>
+                    </div>
+
+                    <!-- /ko -->
+                </div>
             <div class="col-12" id="add" name="add" style="display: none;">
                 <form method="POST" id="addform" name="addform">
                     <br>
@@ -154,6 +190,34 @@
     this.Item = ko.observable(0);
     ko.applyBindings($("#MgtTotalCarbon").get(0));
 
+    function select(data) {
+        let args = {
+            CountryNo: data
+        };
+        $.ajax({
+            url: '@Url.Action("SelectStatusNo")',
+            data: args,
+            method: "POST",
+            async: true,
+            success: function (response) {
+                if (response) {
+                    if (data != null && data != "-1") {
+                        window.location.href = window.location.href.split('?')[0] + "?StatusNo=" + data;
+                    }
+                    else {
+                        window.location.href = window.location.href.split('?')[0];
+                    }
+                } else {
+                    window.location.href = window.location.href.split('?')[0] + "?StatusNo=" + data;
+                    alert("查無資料");
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
+
     //篩選國家顯示數據
     $("#filter").on("change", function (e) {
         CountryNo = $(this).val()
@@ -169,7 +233,7 @@
             },
             success: function (result) {
                 console.log(result);
-                
+
 
 
             },
@@ -196,7 +260,7 @@
         var CountryNo = document.getElementById(addCountry).value;
         var T_CarbonNumber = document.getElementById(addT_CarbonNumber).value;
         var TotalCarbonNumber = document.getElementById(addTotal_CarbonNumber).value;
-        
+
 
         //數字限制條件 驗證非負浮點數（正浮點數   0）
         var NumberReg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
