@@ -20,21 +20,43 @@
             <h1 id="title">@ViewData["AddTitle"]</h1>
             <!-- /ko -->
             <div class="col-12" style="margin: 10px 0px 10px 0px;">
+                <!-- ko ifnot: IsClickAdd() -->
                 <div class="col-12 form-inline">
-                    <!-- ko ifnot: IsClickAdd() -->
                     <label>身分類型：</label>
-                    <select class="form-control" name="SelectStatusNo" id="SelectStatusNo">
-                        @{ List<StatusModels> SelectStatus = (List<StatusModels>)ViewData["Status"];
-                            <option value="-1" selected>------</option>
-                            foreach (var select in SelectStatus)
-                            {
-                                <option value=@select.StatusNo>@select.StatusName</option>
+                    @if (ViewData["SelectStatusNo"] != null)
+                    {
+                        <select class="form-control" name="selectStatusNo" id="selectStatusNo" onchange="select(this.value);">
+                            <option value="-1">------</option>
+                            @{ List<StatusModels> SelectStatus = (List<StatusModels>)ViewData["Status"];
+                                foreach (var select in SelectStatus)
+                                {
+                                    if (select.StatusNo == ViewData["SelectStatusNo"].ToString())
+                                    {
+                                        <option value=@select.StatusNo selected>@select.StatusName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value=@select.StatusNo>@select.StatusName</option>
+                                    }
+                                }
                             }
-                        }
-                    </select>
+                        </select>
+                    }
+                    else
+                    {
+                        <select class="form-control" name="selectStatusNo" id="selectStatusNo" onchange="select(this.value);">
+                            <option value="-1" selected>------</option>
+                            @{ List<StatusModels> SelectStatus = (List<StatusModels>)ViewData["Status"];
+                                foreach (var select in SelectStatus)
+                                {
+                                    <option value=@select.StatusNo>@select.StatusName</option>
+                                }
+                            }
+                        </select>
+                    }
                     <button type="button" class="btn btn-primary" onclick="add()" style="margin: 0px 0px 0px 20px;">新增</button>
-                    <!-- /ko -->
                 </div>
+                <!-- /ko -->
             </div>
             <div class="col-12" id="add" name="add" style="display: none;">
                 <form method="POST" id="addform" name="addform">
@@ -224,6 +246,36 @@
     this.Item = ko.observable(0);
     ko.applyBindings($("#MgtMember").get(0));
 
+    //篩選身分類型
+    function select(data) {
+        let args = {
+            StatusNo: data
+        };
+
+        $.ajax({
+            url: '@Url.Action("SelectStatusNo")',
+            data: args,
+            method: "POST",
+            async: true,
+            success: function (response) {
+                if (response) {
+                    if (data != null && data != "-1") {
+                        window.location.href = window.location.href.split('?')[0] + "?StatusNo=" + data;
+                    }
+                    else {
+                        window.location.href = window.location.href.split('?')[0];
+                    }
+                } else {
+                    window.location.href = window.location.href.split('?')[0] + "?StatusNo=" + data;
+                    alert("查無資料");
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
+
     //新增
     function add() {
         this.IsClickAdd(true);
@@ -284,10 +336,10 @@
                             async: true,
                             success: function (response) {
                                 if (response != null) {
-                                    alert("新增成功")
+                                    alert("新增成功");
                                     window.location.reload();
                                 } else {
-                                    alert("新增失敗，可能原因：權限不足")
+                                    alert("新增失敗，可能原因：權限不足");
                                 }
                             },
                             error: function (e) {
@@ -365,10 +417,10 @@
             async: true,
             success: function (response) {
                 if (response) {
-                    alert("修改成功")
+                    alert("修改成功");
                     window.location.reload();
                 } else {
-                    alert("修改失敗，可能原因：權限不足")
+                    alert("修改失敗，可能原因：權限不足");
                 }
             },
             error: function (e) {
@@ -402,10 +454,10 @@
                 async: true,
                 success: function (response) {
                     if (response) {
-                        alert("刪除成功")
+                        alert("刪除成功");
                         window.location.reload();
                     } else {
-                        alert("刪除失敗，可能原因：權限不足")
+                        alert("刪除失敗，可能原因：權限不足");
                     }
                 },
                 error: function (e) {

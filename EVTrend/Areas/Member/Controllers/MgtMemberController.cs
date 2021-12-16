@@ -15,13 +15,16 @@ namespace EVTrend.Areas.Member.Controllers
         /// <summary>
         /// 使用者管理View
         /// </summary>
+        /// <param name="Model"></param>
         /// <returns></returns>
-        public IActionResult Index()
+        public IActionResult Index(MemberModels Model)
         {
             if (getUserStatusNo() == "0") //管理員
             {
-                ViewData["Member"] = GetMemberModel();
+                ViewData["Member"] = GetMemberModel(Model.StatusNo);
                 ViewData["Status"] = GetStatusModel();
+                ViewData["SelectStatusNo"] = Model.StatusNo;
+
                 return View("MgtMember");
             }
             else
@@ -30,9 +33,14 @@ namespace EVTrend.Areas.Member.Controllers
             }
         }
 
-        private List<MemberModels> GetMemberModel()
+        /// <summary>
+        /// GetMemberModel
+        /// </summary>
+        /// <param name="StatusNo"></param>
+        /// <returns></returns>
+        private List<MemberModels> GetMemberModel(string StatusNo = null)
         {
-            var data = GetMember();
+            var data = GetMember(StatusNo);
             List<MemberModels> list = new List<MemberModels>();
 
             foreach (DataRow row in data.Rows)
@@ -58,17 +66,34 @@ namespace EVTrend.Areas.Member.Controllers
         /// <summary>
         /// 撈DB會員資料
         /// </summary>
+        /// <param name="StatusNo"></param>
         /// <returns></returns>
-        private DataTable GetMember()
+        private DataTable GetMember(string StatusNo = null)
         {
-            var sqlStr = string.Format("SELECT m.MemberNo, m.Account, m.Username, m.Gender, m.Birthday, m.CreateTime, m.ModifyTime, m.StatusNo, s.StatusName FROM member m " +
-                "LEFT JOIN status s on m.StatusNo = s.StatusNo " +
-                "ORDER BY m.Account, m.MemberNo ASC");
+            var sqlStr = "";
+
+            if (!string.IsNullOrEmpty(StatusNo))
+            {
+                sqlStr = string.Format("SELECT m.MemberNo, m.Account, m.Username, m.Gender, m.Birthday, m.CreateTime, m.ModifyTime, m.StatusNo, s.StatusName FROM member m " +
+                    "LEFT JOIN status s on m.StatusNo = s.StatusNo " +
+                    "WHERE m.StatusNo = {0} " +
+                    "ORDER BY m.Account, m.MemberNo ASC", SqlVal2(StatusNo));
+            }
+            else
+            {
+                sqlStr = string.Format("SELECT m.MemberNo, m.Account, m.Username, m.Gender, m.Birthday, m.CreateTime, m.ModifyTime, m.StatusNo, s.StatusName FROM member m " +
+                    "LEFT JOIN status s on m.StatusNo = s.StatusNo " +
+                    "ORDER BY m.Account, m.MemberNo ASC");
+            }
 
             var data = _DB_GetData(sqlStr);
             return data;
         }
 
+        /// <summary>
+        /// GetStatusModel
+        /// </summary>
+        /// <returns></returns>
         private List<StatusModels> GetStatusModel()
         {
             var data = GetStatus();
@@ -188,6 +213,43 @@ namespace EVTrend.Areas.Member.Controllers
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// 篩選身分類型
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns></returns>
+        public bool SelectStatusNo(MemberModels Model)
+        {
+            // admin check
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
+            if (Model.StatusNo != null && Model.StatusNo != "-1")
+            {
+                if (GetMemberModel(Model.StatusNo).Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (GetMemberModel().Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
     }
