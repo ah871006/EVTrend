@@ -86,7 +86,9 @@ namespace EVTrend.Areas.News.Controllers
             }
             foreach (DataRow row in newsTypes.Rows)
             {
-                newsPageModel.NewsTypes.Add(ConvertRowToNewsTypeModel(row));
+                var newsTypeModel = ConvertRowToNewsTypeModel(row);
+                newsPageModel.NewsTypes.Add(newsTypeModel);
+                newsPageModel.NewsTypesDictionary[newsTypeModel.NewsTypeNo] = newsTypeModel;
             }
 
             return newsPageModel;

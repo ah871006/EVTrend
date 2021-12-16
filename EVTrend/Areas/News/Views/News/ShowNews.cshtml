@@ -21,7 +21,7 @@
         {
             <tr>
                 <td class="align-middle">@news.NewsNo</td>
-                <td class="align-middle">@news.NewsTypeNo</td>
+                <td class="align-middle">@Model.NewsTypesDictionary[@news.NewsTypeNo].TypeName</td>
                 <td class="align-middle"><a href="@news.NewsLink">@news.NewsTitle</a></td>
                 <td class="align-middle">@news.NewsContent</td>
                 <td class="align-middle">@news.NewsHits</td>
