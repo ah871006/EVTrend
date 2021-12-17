@@ -324,7 +324,7 @@ namespace EVTrend.Areas.Content.Controllers
 
             if (Model.CountryNo.ToString() != null && Model.CountryNo.ToString() != "-1")
             {
-                if (GetTotalCarbon(Model.CountryNo.ToString()).Count > 0)
+                if (GetCountryTotalCarbon(Model.CountryNo).Count > 0)
                 {
                     return true;
                 }
@@ -335,7 +335,7 @@ namespace EVTrend.Areas.Content.Controllers
             }
             else
             {
-                if (GetTotalCarbon().Count > 0)
+                if (GetCountryTotalCarbon().Count > 0)
                 {
                     return true;
                 }

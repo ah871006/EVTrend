@@ -18,16 +18,17 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(MgtTotalElecModel Model)
         {
             // admin check
             if (getUserStatusNo() != "0")
             {
                 return Redirect("~/Home/Error");
             }
-            ViewData["GetTotalElec"] = GetTotalElec();
+            ViewData["GetTotalElec"] = GetCountryTotalElec(Model.CountryNo);
             ViewData["GetYear"] = GetYear();
             ViewData["GetCountry"] = GetCountry();
+            ViewData["SelectCountryNo"] = Model.CountryNo;
             //ViewData["GetCountry"] = GetCountry();
             return View("MgtTotalElec");
         }
@@ -84,16 +85,30 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public List<MgtTotalElecModel> GetTotalElec()
+        public List<MgtTotalElecModel> GetCountryTotalElec(int CountryNo = 0)
         {
-
-            var sqlStr = string.Format(
+            var sqlStr = "";
+            if (CountryNo == 0)
+            {
+                sqlStr = string.Format(
                 "SELECT TotalRegisterNo, TotalRegisterYear, YearName, TotalRegisterCountryNo, countryName,T_RegisterNumber,TotalRegisterNumber,TotalRegisterCreateTime,TotalRegisterModifyTime FROM evtrend.`total_registercar` as a " +
                 "inner join evtrend.`countries` as b " +
                 "on a.TotalRegisterCountryNo = b.CountryNo " +
                 "inner join evtrend.`years` as c " +
                 "on a.TotalRegisterYear = c.YearNo " +
                 "ORDER BY CountryName,YearName ASC");
+            }
+            else
+            {
+                sqlStr = string.Format(
+                "SELECT TotalRegisterNo, TotalRegisterYear, YearName, TotalRegisterCountryNo, countryName,T_RegisterNumber,TotalRegisterNumber,TotalRegisterCreateTime,TotalRegisterModifyTime FROM evtrend.`total_registercar` as a " +
+                "inner join evtrend.`countries` as b " +
+                "on a.TotalRegisterCountryNo = b.CountryNo " +
+                "inner join evtrend.`years` as c " +
+                "on a.TotalRegisterYear = c.YearNo " +
+                "WHERE TotalRegisterCountryNo = {0} " +
+                "ORDER BY CountryName,YearName ASC", SqlVal2(CountryNo));
+            }
             var data = _DB_GetData(sqlStr);
             List<MgtTotalElecModel> list = new List<MgtTotalElecModel>();
             foreach (DataRow row in data.Rows)
@@ -292,6 +307,37 @@ namespace EVTrend.Areas.Content.Controllers
                 return false;
             }
 
+        }
+        public bool SelectCountryNo(MgtTotalElecModel Model)
+        {
+            // admin check
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+
+            if (Model.CountryNo.ToString() != null && Model.CountryNo.ToString() != "-1")
+            {
+                if (GetCountryTotalElec(Model.CountryNo).Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (GetCountryTotalElec().Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }
