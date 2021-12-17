@@ -109,7 +109,7 @@
                 <table class="table" id="TotalRegisterTable" name="TotalRegisterTable" style="text-align: center;">
                     <thead>
                         <tr>
-                            <th scope="col">編號</th>
+                            
                             <th scope="col">年分</th>
                             <th scope="col">國家</th>
                             <th scope="col">電動車領牌數</th>
@@ -124,7 +124,7 @@
                         {
                             <tr>
                                 <!-- ko ifnot: IsEdit() && Item() == @item.TotalRegisterNo -->
-                                <td class="align-middle">@item.TotalRegisterNo</td>
+                                
                                 <td class="align-middle">@item.Year</td>
                                 <td class="align-middle">@item.Country</td>
                                 <td class="align-middle">@item.ElecRegisterNumber</td>
@@ -147,7 +147,7 @@
                             </tr>
                             <tr>
                                 <!-- ko if: IsEdit() && Item() == @item.TotalRegisterNo -->
-                                <td class="align-middle">@item.TotalRegisterNo</td>
+                                
                                 <td class="align-middle">@item.Year</td>
                                 <td class="align-middle">@item.Country</td>
                                 <td class="align-middle">

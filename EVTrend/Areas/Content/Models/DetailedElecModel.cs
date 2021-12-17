@@ -18,8 +18,10 @@ namespace EVTrend.Areas.Content.Models
     {
         public int RegisterCarNo { get; set; }
         public int RegisterCarCountryCarsTypeNo { get; set; }
+        public int CountryNo { get; set; }
+        public string CountryName { get; set; }
+        public int CarsTypeNo { get; set; }
         public int RegisterCarYear { get; set; }
-        public int RegisterCarCreateUser { get; set; }
         public string RegisterCarCreateTime { get; set; }
         public string RegisterCarModifyTime { get; set; }
 
