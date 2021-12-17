@@ -18,15 +18,20 @@ namespace EVTrend.Areas.Content.Models
     }
     public class MgtDetailedCarbonModel : DetailedCarbonModel
     {
-        public int CarbonNo { get;set;}
-        public int CarbonCountryCarsTypeNo {get;set; }
+        public int CarbonNo { get; set; }
+        public int CarbonCountryCarsTypeNo { get; set; }
+        public int CountryNo { get; set; }
+        public string CountryName { get; set; }
+        public int CarsTypeNo { get; set; }
         public int CarbonYear { get; set; }
 
-        public int CarbonCreateUser { get; set; }
+        //public int CarbonCreateUser { get; set; }
         //**
         public string CarbonCreateTime { get; set; }
         public string CarbonModifyTime { get; set; }
 
     }
-    
+
+
+
 }
