@@ -111,7 +111,7 @@ function PasswordCheck() {
     //條件檢查
     if (!PasswordReg.test(Password.val())) {
         //錯誤訊息
-        var errMsg = "<span class='passwordTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入8-20碼的大小寫英文字母及數字符號</font></span>";
+        var errMsg = "<span class='passwordTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入8-20碼的大小寫英文字母、數字及符號</font></span>";
 
         //顯示錯誤訊息
         Password.parent().append(errMsg);
@@ -157,7 +157,7 @@ function UsernameCheck() {
     //條件檢查
     if (Username.val() == "" || Username.val().length > 20 || Username.val() == $("#Account").val()) {
         //錯誤訊息
-        var errMsg = "<span class='usernameTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*必須填寫且不可與帳號相同且要在20字內</font></span>";
+        var errMsg = "<span class='usernameTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*必須填寫，不可與帳號相同且要在20字內</font></span>";
 
         //訊息顯示
         Username.parent().append(errMsg);
