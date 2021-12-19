@@ -86,5 +86,26 @@ namespace EVTrend.Areas.News.Controllers
 
             return newsPageModel;
         }
+
+        public bool Hit(NewsModel Model)
+        {
+            var hits = Model.NewsHits + 1;
+            var sqlStr = string.Format("UPDATE news " +
+                "SET NewsHits = {0} " +
+                "WHERE NewsNo = {1}",
+                SqlVal2(hits),
+                SqlVal2(Model.NewsNo));
+
+            var check = _DB_Execute(sqlStr);
+
+            if (check == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
