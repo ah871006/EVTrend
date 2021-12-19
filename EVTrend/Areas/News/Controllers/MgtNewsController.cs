@@ -104,12 +104,14 @@ namespace EVTrend.Areas.News.Controllers
             var sqlStr = string.Format("UPDATE news " +
                 "SET NewsTitle = {0}, " +
                 "NewsContent  = {1}," +
-                "ModifyTime = {2} " +
+                "ModifyTime = {2}," +
+                "NewsTypeNo = {4}" +
                 "WHERE NewsNo = {3}",
                 SqlVal2(Model.NewsTitle),
                 SqlVal2(Model.NewsContent),
                 DBC.ChangeTimeZone(),
-                SqlVal2(Model.NewsNo));
+                SqlVal2(Model.NewsNo),
+                SqlVal2(Model.NewsTypeNo));
 
             var check = _DB_Execute(sqlStr);
 
@@ -158,14 +160,15 @@ namespace EVTrend.Areas.News.Controllers
                     ")VALUES(" +
                         "{0}," +
                         "{1}," +
-                        "3," +
+                        "{4}," +
                         "2," +
                         "{2}," +
                         "{3}",
                         SqlVal2(Model.NewsContent),
                         SqlVal2(Model.NewsTitle),
                         DBC.ChangeTimeZone(),
-                        SqlVal2(Model.NewsLink) + ")"
+                        SqlVal2(Model.NewsLink) + ")",
+                        SqlVal2(Model.NewsTypeNo)
                     );
 
             var check = _DB_Execute(sqlStr);
