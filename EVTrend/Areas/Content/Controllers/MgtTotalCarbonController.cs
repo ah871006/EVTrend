@@ -95,7 +95,7 @@ namespace EVTrend.Areas.Content.Controllers
                 "on a.TotalCarbonCountryNo = b.CountryNo " +
                 "inner join evtrend.`years` as c " +
                 "on a.TotalCarbonYear = c.YearNo " +
-                "ORDER BY CountryName,YearName ASC");
+                "ORDER BY YearName DESC");
             var data = _DB_GetData(sqlStr);
             List<MgtTotalCarbonModel> list = new List<MgtTotalCarbonModel>();
             foreach (DataRow row in data.Rows)
@@ -140,7 +140,7 @@ namespace EVTrend.Areas.Content.Controllers
                                 "on a.TotalCarbonCountryNo = b.CountryNo " +
                                 "inner join evtrend.`years` as c " +
                                 "on a.TotalCarbonYear = c.YearNo " +
-                                "ORDER BY CountryName,YearName ASC");
+                                "ORDER BY YearName DESC");
 
             }
             else //選擇台灣或美國
@@ -152,7 +152,7 @@ namespace EVTrend.Areas.Content.Controllers
                                 "inner join evtrend.`years` as c " +
                                 "on a.TotalCarbonYear = c.YearNo " +
                                 "WHERE TotalCarbonCountryNo = {0} " +
-                                "ORDER BY CountryName,YearName ASC", SqlVal2(CountryNo));
+                                "ORDER BY YearName DESC", SqlVal2(CountryNo));
 
             }
             var data = _DB_GetData(sqlStr);

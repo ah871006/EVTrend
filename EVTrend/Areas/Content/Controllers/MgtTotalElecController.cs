@@ -96,7 +96,7 @@ namespace EVTrend.Areas.Content.Controllers
                 "on a.TotalRegisterCountryNo = b.CountryNo " +
                 "inner join evtrend.`years` as c " +
                 "on a.TotalRegisterYear = c.YearNo " +
-                "ORDER BY CountryName,YearName ASC");
+                "ORDER BY YearName DESC");
             }
             else
             {
@@ -107,7 +107,7 @@ namespace EVTrend.Areas.Content.Controllers
                 "inner join evtrend.`years` as c " +
                 "on a.TotalRegisterYear = c.YearNo " +
                 "WHERE TotalRegisterCountryNo = {0} " +
-                "ORDER BY CountryName,YearName ASC", SqlVal2(CountryNo));
+                "ORDER BY YearName DESC", SqlVal2(CountryNo));
             }
             var data = _DB_GetData(sqlStr);
             List<MgtTotalElecModel> list = new List<MgtTotalElecModel>();
@@ -151,7 +151,7 @@ namespace EVTrend.Areas.Content.Controllers
                 "inner join evtrend.`years` as c " +
                 "on a.TotalRegisterYear = c.YearNo " +
                 "WHERE TotalRegisterCountryNo = {0} " +
-                "ORDER BY CountryName,YearName ASC", SqlVal2(Model.CountryNo));
+                "ORDER BY YearName DESC", SqlVal2(Model.CountryNo));
             var data = _DB_GetData(sqlStr);
             List<MgtTotalElecModel> list = new List<MgtTotalElecModel>();
             foreach (DataRow row in data.Rows)
