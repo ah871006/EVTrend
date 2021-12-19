@@ -91,11 +91,12 @@ namespace EVTrend.Areas.Content.Controllers
             return list;
         }
         [HttpGet]
-        public JsonResult Test(string car_type_id)
+        public JsonResult GetDraw(string car_type_id)
         {
             List<double> data1 = new List<double>();
             List<double> data2 = new List<double>();
             List<double> data3 = new List<double>();
+            List<int> data4 = new List<int>();
             List<DetailedCarbonModel> list1 = GetDetailCarbonModel();
             List<DetailedElecModel> list2 = GetDetailElecModel();
             IEnumerable<DetailedCarbonModel> DCs = list1;
@@ -105,6 +106,7 @@ namespace EVTrend.Areas.Content.Controllers
                 if (current.CarsTypeName == car_type_id)
                 {
                     data3.Add(current.CarbonNumber);
+                    data4.Add(Int32.Parse(current.YearName));
                 }
             }
             foreach (var current in DEs)
@@ -145,7 +147,7 @@ namespace EVTrend.Areas.Content.Controllers
             //    data2 = new List<double> { 2.2, 3.3, 4.4, 5.5 };
             //    data3 = new List<double> { 2.2, 3.3, 4.4, 5.5 };
             //}
-            return Json(new { total_car = data1, elec_car = data2, carbon = data3 }); ;
+            return Json(new { total_car = data1, elec_car = data2, carbon = data3 ,year=data4 }); ;
         }
     }
 }

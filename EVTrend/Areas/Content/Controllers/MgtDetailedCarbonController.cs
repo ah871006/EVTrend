@@ -18,15 +18,17 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(MgtTotalCarbonModel Model)
         {
             if (getUserStatusNo() != "0")
             {
                 return Redirect("~/Home/Error");
             }
-            ViewData["GetMgtDetailedCarbon"] = GetMgtDetailedCarbon();
+            ViewData["GetMgtDetailedCarbon"] = GetMgtDetailedCarbon(Model.YearNo);
             ViewData["GetYear"] = GetYear();
             ViewData["GetCountry"] = GetCountry();
+            ViewData["SelectYearNo"] = Model.YearNo;
+
 
             return View("MgtDetailedCarbon");
         }
@@ -36,10 +38,12 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public List<MgtDetailedCarbonModel> GetMgtDetailedCarbon()
+        public List<MgtDetailedCarbonModel> GetMgtDetailedCarbon(int YearNo = 0)
         {
-            var sqlStr = string.Format(
-                "SELECT CarbonNo, CarbonCountryCarsTypeNo,CountryName, c.CountryNo, CarsTypeName, c.CarsTypeNo, YearNo,YearName,CarbonNumber,CarbonCreateTime,CarbonModifyTime FROM evtrend.`carbon` as a " +
+            var sqlStr = "";
+            if (YearNo == 0) //選擇全部
+            {
+                sqlStr = string.Format("SELECT CarbonNo, CarbonCountryCarsTypeNo,CountryName, c.CountryNo, CarsTypeName, c.CarsTypeNo, YearNo,YearName,CarbonNumber,CarbonCreateTime,CarbonModifyTime FROM evtrend.`carbon` as a " +
                 "inner join evtrend.`years` as b " +
                 "on a.CarbonYear = b.YearNo " +
                 "inner join evtrend.`country_carstype` as c " +
@@ -49,6 +53,21 @@ namespace EVTrend.Areas.Content.Controllers
                 "inner join evtrend.`cars_type` as e " +
                 "on c.CarsTypeNo = e.CarsTypeNo " +
                 "ORDER BY CarbonYear DESC");
+            }
+            else //選擇特定年份
+            {
+                sqlStr = string.Format("SELECT CarbonNo, CarbonCountryCarsTypeNo,CountryName, c.CountryNo, CarsTypeName, c.CarsTypeNo, YearNo,YearName,CarbonNumber,CarbonCreateTime,CarbonModifyTime FROM evtrend.`carbon` as a " +
+                "inner join evtrend.`years` as b " +
+                "on a.CarbonYear = b.YearNo " +
+                "inner join evtrend.`country_carstype` as c " +
+                "on a.CarbonCountryCarsTypeNo = c.CountryCarsTypeNo " +
+                "inner join evtrend.`countries` as d " +
+                "on c.CountryNo = d.CountryNo " +
+                "inner join evtrend.`cars_type` as e " +
+                "on c.CarsTypeNo = e.CarsTypeNo " +
+                "WHERE YearNo = {0} " +
+                "ORDER BY CarbonYear DESC", SqlVal2(YearNo));
+            }
             var data = _DB_GetData(sqlStr);
             List<MgtDetailedCarbonModel> list = new List<MgtDetailedCarbonModel>();
             foreach (DataRow row in data.Rows)
@@ -279,10 +298,36 @@ namespace EVTrend.Areas.Content.Controllers
             }
 
         }
+        public bool SelectCountryNo(MgtTotalCarbonModel Model)
+        {
+            // admin check
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
 
-
-
-
-
+            if (Model.YearNo.ToString() != null && Model.YearNo.ToString() != "-1")
+            {
+                if (GetMgtDetailedCarbon(Model.YearNo).Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (GetMgtDetailedCarbon().Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 }

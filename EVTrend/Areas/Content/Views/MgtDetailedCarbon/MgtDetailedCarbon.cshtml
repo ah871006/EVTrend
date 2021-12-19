@@ -25,6 +25,42 @@
             <!-- /ko -->
             <div class="col-12" style="margin: 10px 0px 10px 0px;">
                 <!-- ko ifnot: IsClickAdd() -->
+                <div class="col-12 form-inline">
+                    <label>年份：</label>
+                    @if (ViewData["SelectYearNo"] != null)
+                    {
+                        <select class="form-control" name="selectCountryNo" id="selectCountryNo" onchange="select(this.value);">
+                            <option value="-1">------</option>
+                            @{ List<TimeModel> SelectCountry = (List<TimeModel>)ViewData["GetYear"];
+                                foreach (var select in SelectCountry)
+                                {
+                                    if (select.YearNo.ToString() == ViewData["SelectYearNo"].ToString())
+                                    {
+                                        <option value=@select.YearNo.ToString() selected>@select.YearName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value=@select.YearNo.ToString()>@select.YearName</option>
+                                    }
+                                }
+                            }
+
+                        </select>
+                    }
+                    else
+                    {
+                        <select class="form-control" name="selectCountryNo" id="selectCountrysNo" onchange="select(this.value);">
+                            <option value="-1" selected>------</option>
+                            @{ List<TimeModel> SelectCountry = (List<TimeModel>)ViewData["GetYear"];
+                                foreach (var select in SelectCountry)
+                                {
+                                    <option value=@select.YearNo.ToString()>@select.YearName</option>
+                                }
+                            }
+
+                        </select>
+                    }
+                </div>
                 <div>
                     <button type="button" class="btn btn-primary" onclick="add()">新增</button>
                 </div>
@@ -145,6 +181,33 @@
     this.Item = ko.observable(0);
     ko.applyBindings($("#MgtDetailCarbon").get(0));
 
+    function select(data) {
+        let args = {
+            CountryNo: data
+        };
+        $.ajax({
+            url: '@Url.Action("SelectCountryNo")',
+            data: args,
+            method: "POST",
+            async: true,
+            success: function (response) {
+                if (response) {
+                    if (data != null && data != "-1") {
+                        window.location.href = window.location.href.split('?')[0] + "?YearNo=" + data;
+                    }
+                    else {
+                        window.location.href = window.location.href.split('?')[0];
+                    }
+                } else {
+                    window.location.href = window.location.href.split('?')[0] + "?YearNo=" + data;
+                    alert("查無資料");
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
     //顯示該國擁有的車種，供使用者選擇
     function showCountryCarsType() {
         var CountryNo = document.getElementById("addCountry").value;

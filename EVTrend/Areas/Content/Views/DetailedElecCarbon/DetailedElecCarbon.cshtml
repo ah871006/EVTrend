@@ -29,7 +29,7 @@
         var title_name = sel.options[sel.selectedIndex].text + "年度統計";
         // call backend get data here
         $.ajax({
-            url: "@Url.Action("test", "DetailedElecCarbon")",
+            url: "@Url.Action("GetDraw", "DetailedElecCarbon")",
             method: "get",
             contentType: 'application/json',
             data: { "car_type_id": car_type.value},
@@ -66,7 +66,7 @@
                         offsetX: 200
                     },
                     xaxis: {
-                        categories: [2014, 2015, 2016, 2017, 2018],
+                        categories: mydata.year,
                     },
                     yaxis: [
                         {
