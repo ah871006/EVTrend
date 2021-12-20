@@ -78,13 +78,16 @@ function AccountCheck() {
     //錯誤訊息移除
     $(".accountTip").remove();
 
+    //帳號限制條件
+    var AccountReg = /^[a-zA-Z0-9]{3,50}$/;
+
     //帳號 物件
     var Account = $("#Account");
 
     //條件檢查
-    if (Account.val() == "") {
+    if (!AccountReg.test(Account.val())) {
         //錯誤訊息
-        var errMsg = "<span class='accountTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*必須填寫</font></span>";
+        var errMsg = "<span class='accountTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入3-50碼的英文字母或數字</font></span>";
 
         //訊息顯示
         Account.parent().append(errMsg);
@@ -103,7 +106,7 @@ function PasswordCheck() {
     $(".passwordTip").remove();
 
     //密碼限制條件
-    var PasswordReg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_ `\-={}:";'<>?,.\/]).{8,20}$/;
+    var PasswordReg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_ `\-={}:";'<>?,.\/]).{8,40}$/;
 
     //密碼
     var Password = $("#Password");
@@ -111,7 +114,7 @@ function PasswordCheck() {
     //條件檢查
     if (!PasswordReg.test(Password.val())) {
         //錯誤訊息
-        var errMsg = "<span class='passwordTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入8-20碼的大小寫英文字母、數字及符號</font></span>";
+        var errMsg = "<span class='passwordTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入8-40碼的大小寫英文字母、數字及符號</font></span>";
 
         //顯示錯誤訊息
         Password.parent().append(errMsg);
@@ -231,11 +234,24 @@ function BirthdayCheck() {
 
 //檢查是否有重複帳號
 function CheckDuplicateAccount() {
+    //錯誤訊息移除
+    $(".accountTip").remove();
+
+    //帳號限制條件
+    var AccountReg = /^[a-zA-Z0-9]{3,50}$/;
+
     //帳號 物件
     var Account = $("#Account");
 
-    //是否為空
-    if (Account.val() != null && Account.val() != "") {
+    //條件檢查
+    if (!AccountReg.test(Account.val())) {
+        //錯誤訊息
+        var errMsg = "<span class='accountTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入3-50碼的英文字母或數字</font></span>";
+
+        //訊息顯示
+        Account.parent().append(errMsg);
+    }
+    else if (AccountReg.test(Account.val()) && Account.val() != null && Account.val() != "") {
         //Ajax
         $.ajax({
             url: '/Account/DuplicateAccountCheck',
@@ -243,9 +259,6 @@ function CheckDuplicateAccount() {
             method: "POST",
             async: true,
             success: function (response) {
-                //錯誤訊息移除
-                $(".accountTip").remove();
-
                 //是否該帳號已存在
                 if (response) {
                     //錯誤訊息
@@ -253,7 +266,7 @@ function CheckDuplicateAccount() {
 
                     //顯示錯誤訊息
                     Account.parent().append(errMsg);
-                } 
+                }
             }
         });
     }
