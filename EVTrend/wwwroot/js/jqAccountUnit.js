@@ -207,10 +207,10 @@ function BirthdayCheck() {
     //今日 物件
     var today = new Date().toISOString().substring(0, 10);
 
-    //條件限制 檢查生日是否小於1970或大於今日
-    if (Birthday.val() != "" && (Birthday.val() < "1970-01-01" || Birthday.val() > today)) {
+    //條件限制 檢查生日是否小於1900或大於今日
+    if (Birthday.val() != "" && (Birthday.val() < "1900-01-01" || Birthday.val() > today)) {
         //錯誤訊息
-        var errMsg = "<span class='birthdayTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*生日不得小於1970或大於今日</font></span>";
+        var errMsg = "<span class='birthdayTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*生日不得小於1900或大於今日</font></span>";
 
         //錯誤訊息顯示
         Birthday.parent().append(errMsg);

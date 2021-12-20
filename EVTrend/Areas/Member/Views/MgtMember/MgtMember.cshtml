@@ -391,8 +391,8 @@
             return false;
         }
 
-        if (birthday < "1970-01-01" || birthday > today) {
-            alert("生日不得小於1970或大於今日");
+        if (birthday < "1900-01-01" || birthday > today) {
+            alert("生日不得小於1900或大於今日");
             document.getElementById(Birthday).focus();
             return false;
         }
@@ -597,10 +597,10 @@
         //今日 物件
         var today = new Date().toISOString().substring(0, 10);
 
-        //條件限制 檢查生日是否小於1970或大於今日
-        if (addBirthday.val() != "" && (addBirthday.val() < "1970-01-01" || addBirthday.val() > today)) {
+        //條件限制 檢查生日是否小於1900或大於今日
+        if (addBirthday.val() != "" && (addBirthday.val() < "1900-01-01" || addBirthday.val() > today)) {
             //錯誤訊息
-            var errMsg = "<span class='birthdayTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*生日不得小於1970或大於今日</font></span>";
+            var errMsg = "<span class='birthdayTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*生日不得小於1900或大於今日</font></span>";
 
             //錯誤訊息顯示
             addBirthday.parent().append(errMsg);
