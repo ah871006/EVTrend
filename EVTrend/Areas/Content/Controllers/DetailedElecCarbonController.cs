@@ -115,6 +115,10 @@ namespace EVTrend.Areas.Content.Controllers
                 {
                     data2.Add(current.ElecNumber);
                     data1.Add(current.TotalNumber);
+                    if (!data4.Contains(Int32.Parse(current.YearName)))
+                    {
+                        data4.Add(Int32.Parse(current.YearName));
+                    }
                 }
             }
             //if (car_type_id == "大客車")
