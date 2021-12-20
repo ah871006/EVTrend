@@ -29,18 +29,6 @@ namespace EVTrend.Areas.Content.Models
 
     }
 
-    public class TotalDrawModel
-    {
-        public int x { get; set; }
-        public float y { get; set; }
-    }
-
-    //Draw 回傳Model
-    public class DrawDataModel
-    {
-        public List<TotalDrawModel> List_A { get; set; }
-        public List<TotalDrawModel> List_T { get; set; }
-    }
 
     //用在年份清單
     public class TimeModel
