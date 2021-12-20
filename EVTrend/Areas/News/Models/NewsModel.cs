@@ -30,11 +30,11 @@ namespace EVTrend.Areas.News.Models
         [Display(Name = "消息結束")]
         public DateTime NewsEnd { get; set; }
 
-        [Display(Name = "消息創立者")]
-        public string NewsCreateUser { get; set; }
+        // [Display(Name = "消息創立者")]
+        // public string NewsCreateUser { get; set; }
 
-        [Display(Name = "消息修改者")]
-        public string NewsModifyUser { get; set; }
+        // [Display(Name = "消息修改者")]
+        //  public string NewsModifyUser { get; set; }
 
         [Display(Name = "消息連結")]
         public string NewsLink { get; set; }
