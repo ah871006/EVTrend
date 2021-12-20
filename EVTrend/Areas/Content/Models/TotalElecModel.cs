@@ -11,6 +11,7 @@ namespace EVTrend.Areas.Content.Models
     {
         public string Year { get; set; }
         public string Country { get; set; }
+        public int CountryNo { get; set; }
         public float ElecRegisterNumber { get; set; }
         public float TotalRegisterNumber { get; set; }
         public float Percentage { get; set; }
@@ -22,7 +23,7 @@ namespace EVTrend.Areas.Content.Models
         
         public int TotalRegisterNo { get; set; }
         public int YearNo { get; set; }
-        public int CountryNo { get; set; }
+        //public int CountryNo { get; set; }
         public string CreateTime { get; set; }
         public string ModifyTime { get; set; }
 

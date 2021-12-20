@@ -145,24 +145,25 @@
             function getCarbonData() {
                 $.ajax({
                     type: "GET",
-                    url: "TotalElecCarbon/GetCarbonDraw",
+                    url: "TotalElecCarbon/GetDraw",
+                    contentType: 'application/json',
                     async: true,
                     beforeSend: function () {
 
                     },
                     success: function (result) {
-                        //console.log(result);
+                        console.log(result);
                         var options = {
                             series: [
                                 {
                                     name: "運輸業碳排比例/總碳排(美國)",
                                     //data: carbon_data.A_percentage_arr
-                                    data: result.list_A
+                                    data: result.a_carbon_percentage
                                 },
                                 {
                                     name: "運輸業碳排比例/總碳排(台灣)",
                                     //data: carbon_data.T_percentage_arr
-                                    data: result.list_T
+                                    data: result.t_carbon_percentage
                                 },
                             ],
                             chart: {
@@ -189,7 +190,10 @@
                             dataLabels: {
                                 enabled: true,
                                 formatter: function (val) {
-                                    return val.toFixed(2)
+                                    if (val != null) {
+                                        return val.toFixed(2)
+                                    }
+                                    
                                 },
                                 offsetY: -3,
                             },
@@ -211,15 +215,7 @@
                                 size: 1
                             },
                             xaxis: {
-                                type: 'numeric',
-                                tickAmount: 'dataPoints',
-                                labels: {
-                                    hideOverlappingLabels: false
-                                },
-                                title: {
-                                    text: '年分',
-                                },
-                                decimalsInFloat: 0
+                                categories: result.carbon_year,
                             },
                             yaxis: {
                                 title: {
@@ -238,44 +234,16 @@
                             }
                            
                         };
-
-                        var chart = new ApexCharts(document.querySelector("#chart"), options);
-                        chart.render();
-                    },
-                    error: function (e) {
-                        console.log(e);
-                    }
-                });
-               
-                
-                
-                
-            }
-            
-            //取得Elec繪圖資料
-            function getElecData() {
-
-                $.ajax({
-                    type: "GET",
-                    url: "TotalElecCarbon/GetElecDraw",
-                    async: true,
-                    beforeSend: function () {
-
-                    },
-                    success: function (result) {
-                        //console.log(result.list_A);
-                        //console.log(result.list_T);
-                        
-                    var options1 = {
+                        var options1 = {
                             series: [
                                 {
                                     name: "電動車領牌數/總領牌數(美國)",
-                                    data: result.list_A
+                                    data: result.a_elec_percentage
                                 },
                                 {
                                     name: "電動車領牌數/總領牌數(台灣)",
-                                    data: result.list_T
-                                    //data: [0.12,0.13,0.16,0.23,0.45],
+                                    data: result.t_elec_percentage
+                                    
                                 },
                             ],
                             chart: {
@@ -301,7 +269,10 @@
                             dataLabels: {
                                 enabled: true,
                                 formatter: function (val) {
-                                    return val.toFixed(2)
+                                    if (val != null) {
+                                        return val.toFixed(2)
+                                    }
+                                   
                                 },
                                 offsetY: -3,
                             },
@@ -316,7 +287,7 @@
                             grid: {
                                 borderColor: '#e7e7e7',
                                 row: {
-                                    colors: ['#f3f3f3', 'transparent'], 
+                                    colors: ['#f3f3f3', 'transparent'],
                                     opacity: 0.5
                                 },
                             },
@@ -324,15 +295,7 @@
                                 size: 1
                             },
                             xaxis: {
-                                type: 'numeric',
-                                tickAmount: 'dataPoints',
-                                labels: {
-                                    hideOverlappingLabels: false
-                                },
-                                title: {
-                                    text: '年分',
-                                },
-                                decimalsInFloat: 0
+                                categories: result.elec_year,
                             },
                             yaxis: {
                                 title: {
@@ -351,31 +314,25 @@
                             }
                         };
 
-                        var chart = new ApexCharts(document.querySelector("#chart1"), options1);
+
+                        var chart = new ApexCharts(document.querySelector("#chart"), options);
                         chart.render();
+                        var chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+                        chart1.render();
                         
-                        
-                        
-
-
 
                     },
                     error: function (e) {
                         console.log(e);
                     }
                 });
+        
                 
-                
-
-
             }
-            
-            //執行
-            this.getElecData();
-            this.getCarbonData();
-            
 
-            
+            //執行
+            this.getCarbonData()
+           
 
         </script>
 

@@ -10,6 +10,7 @@ namespace EVTrend.Areas.Content.Models
     {
         public string Year { get; set; }
         public string Country { get; set; }
+        public int CountryNo { get; set; }
         public float T_CarbonNumber { get; set; }
         public float TotalCarbonNumber { get; set; }
         public float Percentage { get; set; }
@@ -19,7 +20,7 @@ namespace EVTrend.Areas.Content.Models
     {
         public int TotalCarbonNo { get; set; }
         public int YearNo { get; set; }
-        public int CountryNo { get; set; }
+        //public int CountryNo { get; set; }
         public string CreateTime { get; set; }
         public string ModifyTime { get; set; }
 
