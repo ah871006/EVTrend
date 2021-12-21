@@ -130,57 +130,6 @@ namespace EVTrend.Controllers
         }
 
         /// <summary>
-        /// (DB)依SQL指令取得資料結果(一個字串)
-        /// </summary>
-        public string _DB_GetStr(string strSql, bool cache = false, int cacheSeconds = 60)
-        {
-            if (cache && cacheSeconds > 0)
-            {
-                cacheDatas.RemoveAll(x => x.createTime < DateTime.Now.AddSeconds(cacheSeconds * -1));
-                var result = cacheDatas.Find(x => x.strSql == strSql);
-                if (result == null)
-                {
-                    var str = DBC.GetSQLCmd_Str(strSql);
-                    cacheDatas.Add(new CacheData()
-                    {
-                        strSql = strSql,
-                        resultStr = str,
-                        createTime = DateTime.Now
-                    });
-                    return str;
-                }
-                else
-                {
-                    return result.resultStr;
-                }
-            }
-            else
-            {
-                return DBC.GetSQLCmd_Str(strSql);
-            }
-        }
-
-        /// <summary>
-        /// (DB)依SQL指令取得資料結果(字串陣列[第一欄])
-        /// </summary>
-        public List<string> _DB_GetStrArr(string strSql)
-        {
-            return _DB_GetStrArr(strSql, 0);
-        }
-
-        /// <summary>
-        /// (DB)依SQL指令取得資料結果(字串陣列[第n欄])
-        /// </summary>
-        /// <param name="strSql">SQL</param>
-        /// <param name="n">第n欄(從0開始)</param>
-        public List<string> _DB_GetStrArr(string strSql, int n)
-        {
-            return DBC.GetSQLCmd_DT(strSql)
-                .AsEnumerable()
-                .Select(row => row.Field<object>(n).ToString()).ToList();
-        }
-
-        /// <summary>
         /// 依SQL指令執行
         /// </summary>
         public int _DB_Execute(string strSql)
@@ -191,25 +140,14 @@ namespace EVTrend.Controllers
             }
             catch (Exception e)
             {
-                //LogInfo("_DB_Execute", e + ":" + strSql);
                 throw e;
-
-                //return 0; //(再做參數控制出庫/DEV環境)
             }
-        }
-
-        /// <summary>
-        /// 依SQL指令執行
-        /// </summary>
-        public int _DB_Execute_Async(string strSql)
-        {
-            return DBC.ExecCmdAsync(strSql);
         }
 
         /// <summary>
         /// SHA256加密
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="str"></param>
         /// <returns></returns>
         public string SHA256_Encryption(string str)//SHA256
         {
@@ -272,31 +210,6 @@ namespace EVTrend.Controllers
             }
 
             var sqlStr = string.Format("SELECT StatusNo FROM member WHERE Account = {0}", SqlVal2(Request.Cookies["account"]));
-            var data = _DB_GetData(sqlStr);
-
-            if (data.Rows.Count == 1)
-            {
-                return data.Rows[0].ItemArray.GetValue(0).ToString();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// 取得帳號狀態
-        /// </summary>
-        /// <returns></returns>
-        public string getUserStatusNo(string Account)
-        {
-            // 使用此函數時為防止錯誤Cookie，須明確檢查值為0或1
-            // null: 帳戶不存在於DB中
-            // 0: 管理員
-            // 1: 會員
-            // 2: 停權
-
-            var sqlStr = string.Format("SELECT StatusNo FROM member WHERE Account = {0}", SqlVal2(Account));
             var data = _DB_GetData(sqlStr);
 
             if (data.Rows.Count == 1)
