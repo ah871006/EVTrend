@@ -40,7 +40,7 @@ namespace EVTrend.Areas.News.Controllers
             // news.NewsEnd = DateTime.Parse(row.ItemArray.GetValue(7).ToString());
             news.NewsCreateUser = row.ItemArray.GetValue(8).ToString();
             // news.NewsModifyUser = row.ItemArray.GetValue(9).ToString();
-
+            //login-forget-password <span class="offset-1" id="forget-password"><a href="/Account/ForgetPassword">忘記密碼?</a></span>
             return news;
         }
 
