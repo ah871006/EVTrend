@@ -28,7 +28,13 @@ namespace EVTrend.Areas.News.Controllers
 
         private DataTable GetAllNews()
         {
-            var sqlStr = string.Format("SELECT NewsNo, NewsTypeNo, NewsTitle, NewsContent, NewsHits, CreateTime, ModifyTime, NewsEnd, NewsCreateUser, NewsModifyUser from evtrend.`news`");
+            var sqlStr = string.Format("SELECT NewsNo, NewsTypeNo, NewsTitle, NewsContent, NewsHits, CreateTime, ModifyTime, NewsEnd from evtrend.`news`");
+            var data = _DB_GetData(sqlStr);
+            return data;
+        }
+        private DataTable GetAllNewsTypes()
+        {
+            var sqlStr = string.Format("SELECT NewsTypeNo, TypeName, TypeDescription, CreateTime, ModifyTime from evtrend.`news_type`");
             var data = _DB_GetData(sqlStr);
             return data;
         }
@@ -48,10 +54,24 @@ namespace EVTrend.Areas.News.Controllers
                 news.ModifyTime = DateTime.Parse(row.ItemArray.GetValue(6).ToString());
             }
             // news.NewsEnd = DateTime.Parse(row.ItemArray.GetValue(7).ToString());
-            news.NewsCreateUser = row.ItemArray.GetValue(8).ToString();
+            // news.NewsCreateUser = row.ItemArray.GetValue(8).ToString();
             // news.NewsModifyUser = row.ItemArray.GetValue(9).ToString();
 
             return news;
+        }
+        private NewsTypeModel ConvertRowToNewsTypeModel(DataRow row)
+        {
+            var newsType = new NewsTypeModel();
+
+            newsType.NewsTypeNo = (int)row.ItemArray.GetValue(0);
+            newsType.TypeName = row.ItemArray.GetValue(1).ToString();
+            newsType.TypeDescription = row.ItemArray.GetValue(2).ToString();
+            newsType.CreateTime = DateTime.Parse(row.ItemArray.GetValue(3).ToString());            
+            if (row.ItemArray.GetValue(4).ToString() != "")
+            {
+                newsType.ModifyTime = DateTime.Parse(row.ItemArray.GetValue(4).ToString());
+            }
+            return newsType;
         }
 
         private NewsPageModel GetNewsPageModel()
@@ -59,9 +79,16 @@ namespace EVTrend.Areas.News.Controllers
             var newsPageModel = new NewsPageModel();
 
             var news = GetAllNews();
+            var newsTypes = GetAllNewsTypes();
             foreach (DataRow row in news.Rows)
             {
                 newsPageModel.News.Add(ConvertRowToNewsModel(row));
+            }
+            foreach (DataRow row in newsTypes.Rows)
+            {
+                var newsTypeModel = ConvertRowToNewsTypeModel(row);
+                newsPageModel.NewsTypes.Add(newsTypeModel);
+                newsPageModel.NewsTypesDictionary[newsTypeModel.NewsTypeNo] = newsTypeModel;
             }
 
             return newsPageModel;
@@ -77,12 +104,14 @@ namespace EVTrend.Areas.News.Controllers
             var sqlStr = string.Format("UPDATE news " +
                 "SET NewsTitle = {0}, " +
                 "NewsContent  = {1}," +
-                "ModifyTime = {2} " +
+                "ModifyTime = {2}," +
+                "NewsTypeNo = {4}" +
                 "WHERE NewsNo = {3}",
                 SqlVal2(Model.NewsTitle),
                 SqlVal2(Model.NewsContent),
                 DBC.ChangeTimeZone(),
-                SqlVal2(Model.NewsNo));
+                SqlVal2(Model.NewsNo),
+                SqlVal2(Model.NewsTypeNo));
 
             var check = _DB_Execute(sqlStr);
 
@@ -125,17 +154,21 @@ namespace EVTrend.Areas.News.Controllers
                         "NewsContent," +
                         "NewsTitle," +
                         "NewsTypeNo," +
-                        "NewsCreateUser," +
-                        "CreateTime" +
+                        //"NewsCreateUser," +
+                        "CreateTime," +
+                        "NewsLink" +
                     ")VALUES(" +
                         "{0}," +
                         "{1}," +
-                        "3," +
-                        "2," +
-                        "{2}",
+                        "{4}," +
+                        //"2," +
+                        "{2}," +
+                        "{3}",
                         SqlVal2(Model.NewsContent),
                         SqlVal2(Model.NewsTitle),
-                        DBC.ChangeTimeZone() + ")"
+                        DBC.ChangeTimeZone(),
+                        SqlVal2(Model.NewsLink) + ")",
+                        SqlVal2(Model.NewsTypeNo)
                     );
 
             var check = _DB_Execute(sqlStr);
