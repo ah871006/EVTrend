@@ -38,12 +38,6 @@ namespace EVTrend.Areas.News.Controllers
             var data = _DB_GetData(sqlStr);
             return data;
         }
-        private DataTable GetAllNewsTypes()
-        {
-            var sqlStr = string.Format("SELECT NewsTypeNo, TypeName, TypeDescription, CreateTime, ModifyTime from evtrend.`news_type`");
-            var data = _DB_GetData(sqlStr);
-            return data;
-        }
 
         private NewsModel ConvertRowToNewsModel(DataRow row)
         {
