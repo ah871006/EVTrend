@@ -1,4 +1,5 @@
-﻿@model EVTrend.Areas.News.Models.NewsPageModel;
+﻿@using EVTrend.Areas.News.Models
+@model EVTrend.Areas.News.Models.NewsPageModel;
 @{
     ViewData["MgtTitle"] = "最新消息管理";
     ViewData["AddTitle"] = "新增消息";
@@ -25,7 +26,7 @@
                 <form method="POST" id="addNewsForm" name="addNewsForm">
                     <div class="col-12 form-inline">
                         <label>消息類型：</label>
-                        <select class="form-control required" id="addNewsTypeNo" name="addNewsTypeNo">
+                        <select class="form-control required" id="addNewsTypeNo" name="addNewsTypeNo" asp-items="@(new SelectList(Model.NewsTypes, nameof(NewsTypeModel.NewsTypeNo), nameof(NewsTypeModel.TypeName)))">
                         </select>
                     </div>
                     <br>
@@ -40,11 +41,16 @@
                     </div>
                     <br>
                     <div class="col-12 form-inline">
-                        <button type="submit" class="btn btn-success" onclick="addNews('addNewsTypeNo', 'addNewsTitle', 'addNewsContent'); return false;">確認</button>
+                        <label>連結：</label>
+                        <input type="text" class="form-control required" id="addNewsLink" name="addNewsLink">
+                    </div>
+                    <br>
+                    <div class="col-12 form-inline">
+                        <button type="submit" class="btn btn-success" onclick="addNews('addNewsTypeNo', 'addNewsTitle', 'addNewsContent', 'addNewsLink'); return false;">確認</button>
                         <span>&nbsp;&nbsp;</span>
                         <button type="button" class="btn btn-secondary" onclick="cancelAdd()">取消</button>
                     </div>
-                </form>
+                </form>                
             </div>
             <div class="col-12">
                 <table class="table" id="newsTable" name="newsTable" style="text-align: center;">
@@ -66,7 +72,7 @@
                             <tr>
                                 <!-- ko ifnot: IsEdit() && Item() == @news.NewsNo -->
                                 <td class="align-middle">@news.NewsNo</td>
-                                <td class="align-middle">@news.NewsTypeNo</td>
+                                <td class="align-middle">@Model.NewsTypesDictionary[@news.NewsTypeNo].TypeName</td>
                                 <td class="align-middle">@news.NewsTitle</td>
                                 <td class="align-middle">@news.NewsContent</td>
                                 <td class="align-middle">@news.NewsHits</td>
@@ -96,7 +102,8 @@
                             <tr>
                                 <!-- ko if: IsEdit() && Item() == @news.NewsNo -->
                                 <td class="align-middle" id="newsNo">@news.NewsNo</td>
-                                <td class="align-middle" id="newsNo">@news.NewsTypeNo</td>
+                                <td class="align-middle" id="newsTypeNo"><select class="form-control required" id="editNewsType" name="editNewsType" asp-items="@(new SelectList(Model.NewsTypes, nameof(NewsTypeModel.NewsTypeNo), nameof(NewsTypeModel.TypeName)))">
+                        </select></td>
                                 <td class="align-middle">
                                     <input type="text" class="form-control" id="editNewsTitle" name="editNewsTitle" value="@news.NewsTitle" style="width: 160px;">
                                 </td>
@@ -114,7 +121,7 @@
                                     <td class="align-middle">@news.ModifyTime.ToString("D", new System.Globalization.CultureInfo("zh-TW"))</td>
                                 }
                                 <td class="align-middle">
-                                    <button type="button" class="btn btn-success" onclick="updateNews(@news.NewsNo, 'editNewsTitle', 'editNewsContent')">確認</button>
+                                    <button type="button" class="btn btn-success" onclick="updateNews(@news.NewsNo, 'editNewsTitle', 'editNewsContent', 'editNewsType')">確認</button>
                                     <span>&nbsp;&nbsp;</span>
                                     <button type="button" class="btn btn-secondary" onclick="cancelEdit(@news.NewsNo)">取消</button>
                                 </td>
@@ -145,15 +152,17 @@
         newsTable.style.display = "none";
     }
 
-    function addNews(addNewsTypeNo, addNewsTitle, addNewsContent) {
-        var addNewsTypeNo = document.getElementById(addNewsTitle).value;
+    function addNews(addNewsTypeNo, addNewsTitle, addNewsContent, addNewsLink) {
+        var addNewsTypeNo = document.getElementById(addNewsTypeNo).value;
         var addNewsTitle = document.getElementById(addNewsTitle).value;
-        var addNewsContent = document.getElementById(addNewsContent).value
+        var addNewsContent = document.getElementById(addNewsContent).value;
+        var addNewsLink = document.getElementById(addNewsLink).value
 
         let args = {
             NewsTypeNo: addNewsTypeNo,
             NewsTitle: addNewsTitle,
-            NewsContent: addNewsContent
+            NewsContent: addNewsContent,
+            NewsLink: addNewsLink
         };
 
         $.ajax({
@@ -194,9 +203,10 @@
         editNewsTitle.focus();
     }
 
-    function updateNews(newsNo, NewsTitle, NewsContent) {
+    function updateNews(newsNo, NewsTitle, NewsContent, NewsType) {
         var newsTitle = document.getElementById(NewsTitle).value;
         var newsContent = document.getElementById(NewsContent).value;
+        var newsType = document.getElementById(NewsType).value;
 
         this.IsEdit(false);
         this.IsClickEdit(false);
@@ -205,7 +215,8 @@
         let args = {
             NewsNo: newsNo,
             NewsTitle: newsTitle,
-            NewsContent: newsContent
+            NewsContent: newsContent,
+            NewsTypeNo: newsType
         };
 
         $.ajax({
