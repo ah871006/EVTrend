@@ -157,6 +157,12 @@
         var addNewsTitle = document.getElementById(addNewsTitle).value;
         var addNewsContent = document.getElementById(addNewsContent).value;
         var addNewsLink = document.getElementById(addNewsLink).value
+        if (addNewsTitle.length == 0 || addNewsContent.length == 0||
+            addNewsTitle.length > 50 || addNewsContent.length > 200||
+            addNewsLink.length == 0) {
+            alert("標題與內容不可為空，且標題要在50字內，內容不可超過200字");
+            return false;
+        }
 
         let args = {
             NewsTypeNo: addNewsTypeNo,
@@ -175,7 +181,7 @@
                     alert("新增成功")
                     window.location.reload();
                 } else {
-                    alert("新增失敗，可能原因：權限不足")
+                    alert("新增失敗")
                 }
             },
             error: function (e) {
@@ -207,7 +213,11 @@
         var newsTitle = document.getElementById(NewsTitle).value;
         var newsContent = document.getElementById(NewsContent).value;
         var newsType = document.getElementById(NewsType).value;
-
+        if (newsTitle.length == 0 || newsContent.length == 0||
+            newsTitle.length > 50 || newsContent.length > 200) {
+            alert("標題與內容不可為空，且標題要在50字內，內容不可超過200字");
+            return false;
+        }
         this.IsEdit(false);
         this.IsClickEdit(false);
         this.Item(newsNo);
@@ -229,7 +239,7 @@
                     alert("修改成功")
                     window.location.reload();
                 } else {
-                    alert("修改失敗，可能原因：權限不足")
+                    alert("修改失敗")
                 }
             },
             error: function (e) {
