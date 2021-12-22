@@ -152,7 +152,7 @@ namespace EVTrend.Areas.Content.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public List<MgtDetailedCarbonModel> GetCountryCarsType(MgtDetailedCarbonModel Model)
+        public List<MgtDetailedElecModel> GetCountryCarsType(MgtDetailedElecModel Model)
         {
             //SQL GetCarsType
             var sqlStr = string.Format(
@@ -164,12 +164,12 @@ namespace EVTrend.Areas.Content.Controllers
                 "WHERE a.CountryNo = {0} " +
                 "ORDER BY a.CarsTypeNo ASC", SqlVal2(Model.CountryNo));
             var data = _DB_GetData(sqlStr);
-            List<MgtDetailedCarbonModel> list = new List<MgtDetailedCarbonModel>();
+            List<MgtDetailedElecModel> list = new List<MgtDetailedElecModel>();
             foreach (DataRow row in data.Rows)
             {
-                MgtDetailedCarbonModel model = new MgtDetailedCarbonModel();
+                MgtDetailedElecModel model = new MgtDetailedElecModel();
 
-                model.CarbonCountryCarsTypeNo = (int)row.ItemArray.GetValue(0);
+                model.CarsTypeNo = (int)row.ItemArray.GetValue(0);
                 model.CarsTypeName = row.ItemArray.GetValue(1).ToString();
                 model.CarsTypeNo = (int)row.ItemArray.GetValue(2);
                 list.Add(model);
@@ -304,7 +304,7 @@ namespace EVTrend.Areas.Content.Controllers
             }
 
         }
-        public bool SelectCountryNo(MgtTotalCarbonModel Model)
+        public bool SelectCountryNo(MgtTotalElecModel Model)
         {
             // admin check
             if (getUserStatusNo() != "0")
