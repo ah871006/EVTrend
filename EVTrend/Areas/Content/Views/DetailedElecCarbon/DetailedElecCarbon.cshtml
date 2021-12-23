@@ -54,7 +54,19 @@
                     chart: {
                         height: 350,
                         type: 'line',
-                        stacked: false
+                        stacked: false,
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                download: true,
+                                selection: true,
+                                zoom: false,
+                                zoomin: true,
+                                zoomout: true,
+                                pan: false,
+
+                            },
+                        },
                     },
                     dataLabels: {
                         enabled: false
@@ -150,7 +162,8 @@
                     legend: {
                         horizontalAlign: 'left',
                         offsetX: 40
-                    }
+                    },
+
                 };
                 var chart = new ApexCharts(document.querySelector("#chart"), options);
                 chart.render();

@@ -24,6 +24,7 @@
             <h1 id="title">@ViewData["AddTitle"]</h1>
             <!-- /ko -->
             <div class="col-12" style="margin: 10px 0px 10px 0px;">
+                <!-- ko ifnot: IsClickAdd() -->
                 <div class="col-12 form-inline">
                     <label>年份：</label>
                     @if (ViewData["SelectYearNo"] != null)
@@ -60,6 +61,7 @@
                         </select>
                     }
                 </div>
+                <!-- /ko -->
                 <!-- ko ifnot: IsClickAdd() -->
                 <div>
                     <button type="button" class="btn btn-primary" onclick="add()">新增</button>
@@ -92,7 +94,7 @@
                     <br>
                     <div class="col-12 form-inline" id="second-select" style="display: none;">
                         <label>車種：</label>
-                        <select class="form-control required" id="addCountryCarsTypeNo" name="addCountryCarsTypeNo"></select>
+                        <select class="form-control required" id="addCarsTypeNo" name="addCarsTypeNo"></select>
                     </div>
                     <br>
                     <div class="col-12 form-inline" id="third-select" style="display: none;">
@@ -106,7 +108,7 @@
                     </div>
                     <br>
                     <div class="col-12 form-inline">
-                        <button type="submit" class="btn btn-success" onclick="addElec('addYear','addCountry','addCountryCarsTypeNo','addElecNumber','addTotalNumber'); return false;">確認</button>
+                        <button type="submit" class="btn btn-success" onclick="addElec('addYear','addCountry','addCarsTypeNo','addElecNumber','addTotalNumber'); return false;">確認</button>
                         <span>&nbsp;&nbsp;</span>
                         <button type="button" class="btn btn-secondary" onclick="cancelAdd()">取消</button>
                     </div>
@@ -233,8 +235,9 @@
             },
             success: function (result) {
                 //顯示div
+                console.log(result)
                 $("#second-select").show()
-                var addCountryCarsType = $("#addCountryCarsTypeNo")
+                var addCountryCarsType = $("#addCarsTypeNo")
 
                 //清空select
                 addCountryCarsType.empty()
@@ -243,7 +246,7 @@
                 $.each(result, function (key, value) {
                     addCountryCarsType
                         .append($("<option></option>")
-                            .attr("value", value.carbonCountryCarsTypeNo)
+                            .attr("value", value.carsTypeNo)
                             .text(value.carsTypeName));
                 });
                 $("#third-select").show()
@@ -271,11 +274,11 @@
     }
 
     //儲存新增
-    function addElec(addYear, addCountry, addCountryCarsTypeNo, addElecNumber, addTotalNumber) {
+    function addElec(addYear, addCountry, addCarsTypeNo, addElecNumber, addTotalNumber) {
         
         var YearNo = document.getElementById(addYear).value;
         var CountryNo = document.getElementById(addCountry).value;
-        var CountryCarsTypeNo = document.getElementById(addCountryCarsTypeNo).value;
+        var CarsTypeNo = document.getElementById(addCarsTypeNo).value;
         var ElecNumber = document.getElementById(addElecNumber).value;
         var TotalNumber = document.getElementById(addTotalNumber).value;
 
@@ -287,7 +290,7 @@
             alert("請選擇確切的年份和國家！");
             return false
         }
-        else if (CountryCarsTypeNo == "") {
+        else if (CarsTypeNo == "") {
             alert("請選擇確切的車種！");
             return false
         }
@@ -302,12 +305,12 @@
             return false
         }
 
-
         $.ajax({
             type: "POST",
             url: "MgtDetailedElec/InsertDetailedElec",
             data: {
-                "RegisterCarCountryCarsTypeNo": CountryCarsTypeNo,
+                "CountryNo": CountryNo,
+                "CarsTypeNo": CarsTypeNo,
                 "RegisterCarYear": YearNo,
                 "ElecNumber": ElecNumber,
                 "TotalNumber": TotalNumber
