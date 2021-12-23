@@ -186,16 +186,20 @@ namespace EVTrend.Areas.Content.Controllers
         public bool InsertDetailedElec(MgtDetailedElecModel Model)
         {
             //admin check
-            //if (getUserStatusNo() != "0")
-            //{
-            //    return false;
-            //}
+            if (getUserStatusNo() != "0")
+            {
+                return false;
+            }
+            //取得 RegisterCarCountryCarsTypeNo
+            var sqlstr1 = string.Format("SELECT CountryCarsTypeNo FROM evtrend.country_carstype WHERE CountryNo = {0} AND CarsTypeNo = {1}", SqlVal2(Model.CountryNo), SqlVal2(Model.CarsTypeNo));
+            var return_dt = _DB_GetData(sqlstr1);
+            var RegisterCarCountryCarsTypeNo = return_dt.Rows[0][0].ToString();
 
             // 檢查是否重複新增
-            var sqlSelect = string.Format("SELECT 1 from evtrend.`register_car` " +
-                "WHERE RegisterCarCountryCarsTypeNo={0} and RegisterCarYear={1}", SqlVal2(Model.RegisterCarCountryCarsTypeNo), SqlVal2(Model.RegisterCarYear));
+            var sqlstr2 = string.Format("SELECT 1 from evtrend.`register_car` " +
+                "WHERE RegisterCarCountryCarsTypeNo={0} and RegisterCarYear={1}", RegisterCarCountryCarsTypeNo, SqlVal2(Model.RegisterCarYear));
 
-            var dataSelect = _DB_GetData(sqlSelect);
+            var dataSelect = _DB_GetData(sqlstr2);
             if (dataSelect.Rows.Count > 0)
             {
                 return false;
@@ -203,7 +207,7 @@ namespace EVTrend.Areas.Content.Controllers
 
 
             //SQL Insert TotalElec
-            var sqlStr = string.Format(
+            var sqlStr3 = string.Format(
                 @"INSERT INTO evtrend.`register_car` (" +
                     "RegisterCarCountryCarsTypeNo," +
                     "RegisterCarYear," +
@@ -216,7 +220,7 @@ namespace EVTrend.Areas.Content.Controllers
                     "{2}," +
                     "{3}," +
                     "{4}",
-                    SqlVal2(Model.RegisterCarCountryCarsTypeNo),
+                    RegisterCarCountryCarsTypeNo,
                     SqlVal2(Model.RegisterCarYear),
                     SqlVal2(Model.ElecNumber),
                     SqlVal2(Model.TotalNumber),
@@ -224,7 +228,7 @@ namespace EVTrend.Areas.Content.Controllers
                 );
 
             //SQL Check
-            var check = _DB_Execute(sqlStr);
+            var check = _DB_Execute(sqlStr3);
 
             //新增是否成功
             if (check == 1)

@@ -25,6 +25,7 @@
             <!-- /ko -->
             <div class="col-12" style="margin: 10px 0px 10px 0px;">
                 <!-- 選擇國家 -->
+                <!-- ko ifnot: IsClickAdd() -->
                 <div class="col-12 form-inline">
                     <label>國家：</label>
                     @if (ViewData["SelectCountryNo"] != null)
@@ -61,6 +62,7 @@
                         </select>
                     }
                 </div>
+                <!-- /ko -->
                 <!-- ko ifnot: IsClickAdd() -->
                 <button type="button" class="btn btn-primary" onclick="add()">新增</button>
                 <!-- /ko -->
