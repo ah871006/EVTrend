@@ -157,10 +157,16 @@
         var addNewsTitle = document.getElementById(addNewsTitle).value;
         var addNewsContent = document.getElementById(addNewsContent).value;
         var addNewsLink = document.getElementById(addNewsLink).value
+        
         if (addNewsTitle.length == 0 || addNewsContent.length == 0||
             addNewsTitle.length > 50 || addNewsContent.length > 200||
             addNewsLink.length == 0) {
             alert("標題與內容不可為空，且標題要在50字內，內容不可超過200字");
+            return false;
+        }
+
+        if (!addNewsLink.includes("https")) {
+            alert("連結輸入內容必須為網址");
             return false;
         }
 
