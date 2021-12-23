@@ -101,11 +101,12 @@ namespace EVTrend.Areas.Content.Controllers
             List<DetailedElecModel> list2 = GetDetailElecModel();
             IEnumerable<DetailedCarbonModel> DCs = list1;
             IEnumerable<DetailedElecModel> DEs = list2;
+            //current.CarsTypeName == car_type_id || data4.Contains(Int32.Parse(current.YearName))
+
             foreach (var current in DCs)
             {
                 if (current.CarsTypeName == car_type_id)
                 {
-                    data3.Add(current.CarbonNumber);
                     data4.Add(Int32.Parse(current.YearName));
                 }
             }
@@ -113,12 +114,33 @@ namespace EVTrend.Areas.Content.Controllers
             {
                 if (current.CarsTypeName == car_type_id)
                 {
-                    data2.Add(current.ElecNumber);
-                    data1.Add(current.TotalNumber);
                     if (!data4.Contains(Int32.Parse(current.YearName)))
                     {
                         data4.Add(Int32.Parse(current.YearName));
                     }
+                }
+            }
+            data4.Sort();
+            foreach (var current in DCs)
+            {
+                if (current.CarsTypeName == car_type_id)
+                {
+                    if (current.CarsTypeName == car_type_id)
+                    {
+                        data3.Add(current.CarbonNumber);
+                    }
+                //    else
+                //    {
+                //        data3.Add(0.0);
+                //    }
+                }
+            }
+            foreach (var current in DEs)
+            {
+                if (current.CarsTypeName == car_type_id)
+                {
+                        data1.Add(current.TotalNumber);
+                        data2.Add(current.ElecNumber);
                 }
             }
             //if (car_type_id == "大客車")
