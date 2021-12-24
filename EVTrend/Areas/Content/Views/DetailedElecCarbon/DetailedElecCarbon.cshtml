@@ -16,18 +16,23 @@
 <div id="chart"></div>
 
 <script>
-    var is_frist = true
+    //var is_frist = true
     function load_data(sel) {
+
+
         // get html element
         var car_type = document.getElementById("car_type");
         var chart = document.getElementById("chart");
+        //alert(car_type.value);
+
         // refresh chart
-        chart.innerHTML = "<p></p>"
+        //chart.innerHTML = "<p></p>"
+        $("#chart").empty();
         // at frist time, remove useless option
-        if (is_frist == true) {
-            car_type.remove(0);
-            is_frist = false;
-        }
+        //if (is_frist == true) {
+        //    car_type.remove(0);
+        //    is_frist = false;
+        //}
         var title_name = sel.options[sel.selectedIndex].text + "年度統計";
         // call backend get data here
         $.ajax({
@@ -64,6 +69,7 @@
                                 zoomin: true,
                                 zoomout: true,
                                 pan: false,
+                                //reset: false
 
                             },
                         },
