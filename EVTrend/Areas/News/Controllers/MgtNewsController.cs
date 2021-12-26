@@ -149,7 +149,24 @@ namespace EVTrend.Areas.News.Controllers
         [HttpPost]
         public bool AddNews(NewsModel Model)
         {
-            var sqlStr = string.Format(
+            string resMsg = "";
+            string checkMsg = "";
+
+            // 長度限制
+            if (string.IsNullOrEmpty(Model.NewsTitle) ||
+                string.IsNullOrEmpty(Model.NewsContent) ||
+                Model.NewsContent.Length > 200 ||
+                Model.NewsTitle.Length > 50)
+            {
+
+                resMsg = "標題或內容不符合長度限制!! 標題與內容不可為空，且標題要在50字內，內容不可超過200字";
+
+                checkMsg = "false";
+
+            }
+            else
+            {
+                var sqlStr = string.Format(
                     @"INSERT INTO news (" +
                         "NewsContent," +
                         "NewsTitle," +
@@ -170,17 +187,19 @@ namespace EVTrend.Areas.News.Controllers
                         SqlVal2(Model.NewsLink) + ")",
                         SqlVal2(Model.NewsTypeNo)
                     );
+            
+                var check = _DB_Execute(sqlStr);
 
-            var check = _DB_Execute(sqlStr);
-
-            if (check == 1)
-            {
-                return true;
+                if (check == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 }
