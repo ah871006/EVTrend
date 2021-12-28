@@ -280,6 +280,11 @@
             document.getElementById(addTotal_CarbonNumber).focus();
             return false
         }
+        else if (parseFloat(T_CarbonNumber) > parseFloat(TotalCarbonNumber)) {
+            alert("請輸入正確碳排量！(總體碳排量須高於運輸業碳排量)");
+            document.getElementById(addT_CarbonNumber).focus();
+            return false;
+        }
 
         $.ajax({
             type: "POST",
@@ -348,6 +353,7 @@
     function saveCarbon(id, editT_CarbonNumber, editTotalCarbonNumber) {
         var T_CarbonNumber = document.getElementById(editT_CarbonNumber).value;
         var TotalCarbonNumber = document.getElementById(editTotalCarbonNumber).value;
+
         //數字限制條件 驗證非負浮點數（正浮點數   0）
         var NumberReg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
 
@@ -357,9 +363,14 @@
             document.getElementById(editT_CarbonNumber).focus();
             return false;
         }
-        if (!NumberReg.test(TotalCarbonNumber)) {
+        else if (!NumberReg.test(TotalCarbonNumber)) {
             alert("請輸入正確碳排量！ (非負數字)");
             document.getElementById(editTotalCarbonNumber).focus();
+            return false;
+        }
+        else if (parseFloat(T_CarbonNumber) > parseFloat(TotalCarbonNumber)) {
+            alert("請輸入正確碳排量！(總體碳排量須高於運輸業碳排量)");
+            document.getElementById(editT_CarbonNumber).focus();
             return false;
         }
 

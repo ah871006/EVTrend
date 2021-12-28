@@ -282,8 +282,8 @@
         var ElecNumber = document.getElementById(addElecNumber).value;
         var TotalNumber = document.getElementById(addTotalNumber).value;
 
-        //數字限制條件 驗證非負浮點數（正浮點數   0）
-        var NumberReg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
+        //數字限制條件 驗證非負整數（正整數+0）
+        var NumberReg = /^\d+$/;
 
         //輸入檢查
         if (YearNo == "" || CountryNo == -1) {
@@ -294,15 +294,20 @@
             alert("請選擇確切的車種！");
             return false
         }
-        else if (!NumberReg.test(ElecNumber) || ElecNumber == "") {
-            alert("請輸入正確車子數量！ (非負數字)");
+        else if (!NumberReg.test(ElecNumber)) {
+            alert("請輸入正確車子數量！ (非負數字，且為整數)");
             document.getElementById(addElecNumber).focus();
-            return false
+            return false;
         }
-        else if (!NumberReg.test(TotalNumber) || TotalNumber == "") {
-            alert("請輸入正確車子數量！ (非負數字)");
+        else if (!NumberReg.test(TotalNumber)) {
+            alert("請輸入正確車子數量！ (非負數字，且為整數)");
             document.getElementById(addTotalNumber).focus();
-            return false
+            return false;
+        }
+        else if (parseInt(ElecNumber) > parseInt(TotalNumber)) {
+            alert("請輸入正確車子數量！(總領牌數須高於電動車領牌數)");
+            document.getElementById(addElecNumber).focus();
+            return false;
         }
 
         $.ajax({
@@ -374,18 +379,23 @@
         var ElecNumber = document.getElementById(editElecNumber).value;
         var TotalNumber = document.getElementById(editTotalNumber).value;
 
-        //數字限制條件 驗證非負浮點數（正浮點數   0）
-        var NumberReg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
+        //數字限制條件 驗證非負整數（正整數+0）
+        var NumberReg = /^\d+$/;
 
         //輸入檢查
         if (!NumberReg.test(ElecNumber)) {
-            alert("請輸入正確車子數量！ (非負數字)");
+            alert("請輸入正確車子數量！ (非負數字，且為整數)");
             document.getElementById(editElecNumber).focus();
             return false;
         }
         else if (!NumberReg.test(TotalNumber)) {
-            alert("請輸入正確車子數量！ (非負數字)");
+            alert("請輸入正確車子數量！ (非負數字，且為整數)");
             document.getElementById(editTotalNumber).focus();
+            return false;
+        }
+        else if (parseInt(ElecNumber) > parseInt(TotalNumber)) {
+            alert("請輸入正確車子數量！(總領牌數須高於電動車領牌數)");
+            document.getElementById(editElecNumber).focus();
             return false;
         }
 
