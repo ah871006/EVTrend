@@ -25,6 +25,11 @@ namespace EVTrend.Areas.Content.Controllers
         {
             //ViewData["DetailedCarbon"] = GetDetailCarbonModel();
             //ViewData["DetailedElec"] = GetDetailElecModel();
+            var chaeck = getUserStatusNo();
+            if (chaeck != "0" && chaeck != "1")
+            {
+                return Redirect("~/Home/Error");
+            }
             return View("DetailedElecCarbon");
         }
         private DataTable GetDetailedCarbon()
