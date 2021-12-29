@@ -17,11 +17,11 @@
                     @if (Model != null)
                     {
                         <!--自動帶入帳號-->
-                        <input type="text" class="form-control required" id="Account" name="Account" value="@Model.Account">
+                        <input type="text" class="form-control required" id="Account" name="Account" onblur="CheckDuplicateAccount();" value="@Model.Account">
                     }
                     else
                     {
-                        <input type="text" class="form-control required" id="Account" name="Account">
+                        <input type="text" class="form-control required" id="Account" name="Account" onblur="CheckDuplicateAccount();">
                     }
                 </div>
                 <br>
