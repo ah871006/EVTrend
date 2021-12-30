@@ -98,6 +98,11 @@ namespace EVTrend.Areas.Content.Controllers
         [HttpGet]
         public JsonResult GetDraw(string car_type_id)
         {
+            var chaeck = getUserStatusNo();
+            if (chaeck != "0" && chaeck != "1")
+            {
+                return Json(new { message = "error" }); ;
+            }
             List<double> data1 = new List<double>();
             List<double> data2 = new List<double>();
             List<double> data3 = new List<double>();
