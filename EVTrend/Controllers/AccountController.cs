@@ -72,8 +72,6 @@ namespace EVTrend.Controllers
 
             if (loginStatus == "0") //由管理員新增的使用者
             {
-                Model.Password = "Admin@123"; //由管理員新增的使用者之密碼都是'Admin@123'
-
                 //SQL Insert Member
                 sqlStr = string.Format(
                     @"INSERT INTO member (" +

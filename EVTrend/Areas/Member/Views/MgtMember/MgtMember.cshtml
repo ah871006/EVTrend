@@ -67,6 +67,16 @@
                     </div>
                     <br>
                     <div class="col-12 form-inline">
+                        <label>密碼：</label>
+                        <input type="password" class="form-control required" id="addPassword" name="addPassword">
+                    </div>
+                    <br>
+                    <div class="col-12 form-inline">
+                        <label>再次確認密碼：</label>
+                        <input type="password" class="form-control required" id="addPasswordCheck" name="addPasswordCheck">
+                    </div>
+                    <br>
+                    <div class="col-12 form-inline">
                         <label>暱稱：</label>
                         <input type="text" class="form-control required" id="addUsername" name="addUsername">
                     </div>
@@ -100,7 +110,7 @@
                     </div>
                     <br>
                     <div class="col-12 form-inline">
-                        <button type="submit" class="btn btn-success" onclick="addMember('addUsername', 'addGender', 'addBirthday', 'addStatusNo'); return false;">確認</button>
+                        <button type="submit" class="btn btn-success" onclick="addMember('addUsername', 'addPassword', 'addGender', 'addBirthday', 'addStatusNo'); return false;">確認</button>
                         <span>&nbsp;&nbsp;</span>
                         <button type="button" class="btn btn-secondary" onclick="cancelAdd()">取消</button>
                     </div>
@@ -288,9 +298,10 @@
     }
 
     //儲存新增
-    function addMember(addUsername, addGender, addBirthday, addStatusNo) {
-        if (AccountCheck() & UsernameCheck() & GenderCheck() & BirthdayCheck() & StatusNoCheck()) {
+    function addMember(addUsername, addPassword, addGender, addBirthday, addStatusNo) {
+        if (AccountCheck() & UsernameCheck() & PasswordCheck() & RepeatPwdCheck() & GenderCheck() & BirthdayCheck() & StatusNoCheck()) {
             var addUsername = document.getElementById(addUsername).value;
+            var addPassword = document.getElementById(addPassword).value;
             var addGender = document.getElementById(addGender).value;
             var addBirthday = document.getElementById(addBirthday).value;
             var addStatusNo = document.getElementById(addStatusNo).value;
@@ -298,55 +309,31 @@
             //帳號 物件
             var addAccount = $("#addAccount");
 
-            //Ajax 送出前檢查帳號是否重複
+            let args = {
+                Account: addAccount.val(),
+                Username: addUsername,
+                Password: addPassword,
+                Gender: addGender,
+                Birthday: addBirthday,
+                StatusNo: addStatusNo
+            };
+
+            //Ajax
             $.ajax({
-                url: '/Account/DuplicateAccountCheck',
-                data: { "Account": addAccount.val() },
+                url: '/Account/Register',
+                data: args,
                 method: "POST",
                 async: true,
                 success: function (response) {
-                    //錯誤訊息移除
-                    $(".accountTip").remove();
-
-                    //是否該帳號已存在
-                    if (response) {
-                        //錯誤訊息
-                        var errMsg = "<span class='accountTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*該帳號已存在</font></span>";
-
-                        //顯示錯誤訊息
-                        addAccount.parent().append(errMsg);
-
-                        //跳出錯誤訊息
-                        alert("新增使用者資料不符合規定");
+                    if (response != null) {
+                        alert("新增成功");
+                        window.location.reload();
                     } else {
-                        //送出表單 註冊
-                        let args = {
-                            Account: addAccount.val(),
-                            Username: addUsername,
-                            Gender: addGender,
-                            Birthday: addBirthday,
-                            StatusNo: addStatusNo
-                        };
-
-                        //Ajax
-                        $.ajax({
-                            url: '/Account/Register',
-                            data: args,
-                            method: "POST",
-                            async: true,
-                            success: function (response) {
-                                if (response != null) {
-                                    alert("新增成功");
-                                    window.location.reload();
-                                } else {
-                                    alert("新增失敗，可能原因：權限不足");
-                                }
-                            },
-                            error: function (e) {
-                                console.log(e);
-                            }
-                        });
+                        alert("新增失敗，可能原因：權限不足");
                     }
+                },
+                error: function (e) {
+                    console.log(e);
                 }
             });
         } else {
@@ -469,11 +456,24 @@
 
     //檢查是否有重複帳號
     function CheckDuplicateAccount() {
+        //錯誤訊息移除
+        $(".accountTip").remove();
+
+        //帳號限制條件
+        var AccountReg = /^[a-zA-Z0-9]{3,50}$/;
+
         //帳號 物件
         var addAccount = $("#addAccount");
 
         //是否為空
-        if (addAccount.val() != null && addAccount.val() != "") {
+        if (!AccountReg.test(addAccount.val())) {
+            //錯誤訊息
+            var errMsg = "<span class='accountTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入3-50碼的英文字母或數字</font></span>";
+
+            //訊息顯示
+            addAccount.parent().append(errMsg);
+        }
+        else if (AccountReg.test(addAccount.val()) && addAccount.val() != null && addAccount.val() != "") {
             //Ajax
             $.ajax({
                 url: '/Account/DuplicateAccountCheck',
@@ -481,9 +481,6 @@
                 method: "POST",
                 async: true,
                 success: function (response) {
-                    //錯誤訊息移除
-                    $(".accountTip").remove();
-
                     //是否該帳號已存在
                     if (response) {
                         //錯誤訊息
@@ -499,6 +496,16 @@
 
     //欄位限制檢查
     $(":input.required").blur(function () {
+        //密碼
+        if ($(this).is("#addPassword")) {
+            PasswordCheck();
+        }
+
+        //再次確認密碼
+        if ($(this).is("#addPasswordCheck")) {
+            RepeatPwdCheck();
+        }
+
         //暱稱
         if ($(this).is("#addUsername")) {
             UsernameCheck();
@@ -526,7 +533,7 @@
         //條件檢查
         if (addAccount.val() == "") {
             //錯誤訊息
-            var errMsg = "<span class='accountTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*必須填寫</font></span>";
+            var errMsg = "<span class='accountTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入3-50碼的英文字母或數字</font></span>";
 
             //訊息顯示
             addAccount.parent().append(errMsg);
@@ -534,7 +541,89 @@
             //Return 失敗
             return false;
         }
+        else {
+            //錯誤訊息移除
+            $(".accountTip").remove();
 
+            //帳號限制條件
+            var AccountReg = /^[a-zA-Z0-9]{3,50}$/;
+
+            if (AccountReg.test(addAccount.val()) && addAccount.val() != null && addAccount.val() != "") {
+                //Ajax
+                $.ajax({
+                    url: '/Account/DuplicateAccountCheck',
+                    data: { "Account": addAccount.val() },
+                    method: "POST",
+                    async: true,
+                    success: function (response) {
+                        //是否該帳號已存在
+                        if (response) {
+                            //錯誤訊息
+                            var errMsg = "<span class='accountTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*該帳號已存在</font></span>";
+
+                            //顯示錯誤訊息
+                            addAccount.parent().append(errMsg);
+
+                            //Return 失敗
+                            return false;
+                        }
+                        else {
+                            //Return 成功
+                            return true;
+                        }
+                    }
+                });
+            }
+        }
+        //Return 成功
+        return true;
+    }
+
+    //密碼檢測
+    function PasswordCheck() {
+        //錯誤訊息移除
+        $(".passwordTip").remove();
+
+        //密碼限制條件
+        var PasswordReg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@@#$%^&*()_ `\-={}:";'<>?,.\/]).{8,40}$/;
+
+        //密碼
+        var addPassword = $("#addPassword");
+
+        //條件檢查
+        if (!PasswordReg.test(addPassword.val())) {
+            //錯誤訊息
+            var errMsg = "<span class='passwordTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*請輸入8-40碼的大小寫英文字母、數字及符號</font></span>";
+
+            //顯示錯誤訊息
+            addPassword.parent().append(errMsg);
+
+            //Return 失敗
+            return false;
+        }
+        //Return 成功
+        return true;
+    }
+
+    //再次確認密碼檢測
+    function RepeatPwdCheck() {
+        //移除錯誤訊息
+        $(".repeatpasswordTip").remove();
+
+        //再次確認密碼 物件
+        var addRepeatPwd = $("#addPasswordCheck");
+
+        //條件限制
+        if (addRepeatPwd.val() == "" || addRepeatPwd.val() != $("#addPassword").val()) {
+            //錯誤訊息
+            var errMsg = "<span class='repeatpasswordTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*密碼為空或不一致</font></span>";
+
+            //錯誤訊息顯示
+            addRepeatPwd.parent().append(errMsg);
+
+            //Return 失敗
+            return false;
+        }
         //Return 成功
         return true;
     }
@@ -550,7 +639,7 @@
         //條件檢查
         if (addUsername.val() == "" || addUsername.val().length > 20 || addUsername.val() == $("#addAccount").val()) {
             //錯誤訊息
-            var errMsg = "<span class='usernameTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*必須填寫且不可與帳號相同且要在20字內</font></span>";
+            var errMsg = "<span class='usernameTip' style='margin-left: 10px'><font color=#DC3545 ; font size=2>*必須填寫，不可與帳號相同且要在20字內</font></span>";
 
             //訊息顯示
             addUsername.parent().append(errMsg);
@@ -558,7 +647,6 @@
             //Return 失敗
             return false;
         }
-
         //Return 成功
         return true;
     }
